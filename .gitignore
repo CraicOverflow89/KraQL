@@ -1,0 +1,8 @@
+.gradle
+.idea
+data
+gradle
+out
+gradlew
+gradlew.bat
+src/main/kotlin/craicoverflow89/kraql/test.kt
