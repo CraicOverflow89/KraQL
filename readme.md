@@ -1,9 +1,9 @@
 KraQL Project
 =============
 
-Lightweight data storage library.
-
 [![Known Vulnerabilities](https://snyk.io//test/github/CraicOverflow89/KoXML/badge.svg?targetFile=build.gradle)](https://snyk.io//test/github/CraicOverflow89/KraQL?targetFile=build.gradle)
+
+Lightweight data storage library.
 
 ### Tasks
 
