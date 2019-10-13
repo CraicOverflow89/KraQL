@@ -34,8 +34,11 @@ class KraQLTable(private val database: KraQLDatabase, private val name: String, 
 
         // NOTE: so here we need to create a record that is valid for the current fields
 
+        // Generate ID
+        val id = 0
+
         // Add Record
-        recordList.add(KraQLTableRecord(data))
+        recordList.add(KraQLTableRecord(id, data))
     }
 
     fun get(): KraQLResult = KraQLResult(recordList)
@@ -47,15 +50,13 @@ class KraQLTable(private val database: KraQLDatabase, private val name: String, 
 
         // Field Data
         fieldList.forEach {
-            add(it.toFile())
+            add(">" + it.toFile())
         }
 
         // Record Data
-        add("[")
         recordList.forEach {
-            addAll(it.toFile())
+            add(it.toFile())
         }
-        add("]")
     }
 
     override fun toString() = "{database: ${database.name}, name: $name}"
@@ -64,8 +65,7 @@ class KraQLTable(private val database: KraQLDatabase, private val name: String, 
 
 class KraQLTableField(private val table: KraQLTable, val name: String, private val type: KraQLTableFieldType) {
 
-    fun toFile() = ""
-    // NOTE: come back to this
+    fun toFile() = "$name:${type.name}"
 
     override fun toString() = "{name: $name, type: $type}"
 
@@ -77,12 +77,13 @@ enum class KraQLTableFieldType {
 
 class KraQLTableInsertException(field: String): Exception("Must supply data for the $field field!")
 
-class KraQLTableRecord(val data: HashMap<String, Any>) {
+class KraQLTableRecord(val id: Int, val data: HashMap<String, Any>) {
 
     fun toFile() = ArrayList<String>().apply {
-
-        // NOTE: come back to this
-    }
+        data.forEach {
+            add(it.value.toString())
+        }
+    }.joinToString(",")
 
     override fun toString() = ArrayList<String>().apply {
         data.forEach {

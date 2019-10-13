@@ -8,7 +8,7 @@ class KraQLApplication {
 
     companion object {
 
-        fun getVersion() = resourceLoad("version")
+        fun getVersion() = resourceLoad("version").readText()
 
         fun loadDatabase(path: String): KraQLDatabase {
 
