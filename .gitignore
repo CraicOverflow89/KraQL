@@ -1,8 +1,17 @@
 .gradle
 .idea
+build
 data
 gradle
 out
 gradlew
 gradlew.bat
 src/main/kotlin/craicoverflow89/kraql/test.kt
+src/main/kotlin/craicoverflow89/kraql/queries/parser/KraQLQuery.interp
+src/main/kotlin/craicoverflow89/kraql/queries/parser/KraQLQuery.tokens
+src/main/kotlin/craicoverflow89/kraql/queries/parser/KraQLQueryBaseListener.java
+src/main/kotlin/craicoverflow89/kraql/queries/parser/KraQLQueryLexer.java
+src/main/kotlin/craicoverflow89/kraql/queries/parser/KraQLQueryLexer.interp
+src/main/kotlin/craicoverflow89/kraql/queries/parser/KraQLQueryLexer.tokens
+src/main/kotlin/craicoverflow89/kraql/queries/parser/KraQLQueryListener.java
+src/main/kotlin/craicoverflow89/kraql/queries/parser/KraQLQueryParser.java

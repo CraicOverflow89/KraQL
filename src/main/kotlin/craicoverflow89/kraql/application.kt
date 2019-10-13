@@ -48,11 +48,11 @@ class KraQLApplication {
             // Write Data
             File(path).writeText(ArrayList<String>().apply {
 
-                // Application Info
+                // Application Data
                 add("# KraQL Database")
                 add("# Version ${getVersion()}")
 
-                // Database Info
+                // Database Data
                 addAll(database.toFile())
             }.joinToString("\n"))
         }
