@@ -67,7 +67,7 @@ class KraQLTable(private val database: KraQLDatabase, val name: String, private 
         }
     }
 
-    override fun toString() = "{name: $name, database: ${database.name}, fields: ${if(fieldList.isEmpty()) "none" else "[" + fieldList.joinToString {it.name} + "]"}}"
+    override fun toString() = "{name: $name, database: ${database.name}, fields: ${if(fieldList.isEmpty()) "none" else "[" + fieldList.joinToString {"{name:${it.name}, type:${it.type}}"} + "]"}}"
 
 }
 
