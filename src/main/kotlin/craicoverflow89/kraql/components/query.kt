@@ -10,9 +10,9 @@ class KraQLQueryInsert(tableName: String, private val fieldList: ArrayList<Strin
     override fun toString() = "{table: $tableName, fieldList: $fieldList, recordList: $recordList}"
 }
 
+class KraQLQueryNotFoundException: Exception("Could not find a query at the location supplied!")
+
 class KraQLQuerySelect(tableName: String): KraQLQuery(tableName) {
 
     //
 }
-
-class KraQLQueryNotFoundException: Exception("Could not find a query at the location supplied!")
