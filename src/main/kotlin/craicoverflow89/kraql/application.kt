@@ -1,6 +1,8 @@
 package craicoverflow89.kraql
 
 import craicoverflow89.kraql.components.KraQLDatabase
+import craicoverflow89.kraql.components.KraQLTable
+import craicoverflow89.kraql.components.KraQLTableFieldType
 import java.io.File
 import java.io.FileNotFoundException
 import kotlin.system.exitProcess
@@ -20,12 +22,84 @@ class KraQLApplication {
                 exitProcess(-1)
             }
 
-            // Read Data
-            val data = file.readLines()
-            // NOTE: this is where we parse the database data and create a KraQLDatabase object
+            // File Reader
+            val reader = file.bufferedReader()
 
-            // TEMP RETURN
-            return KraQLDatabase("")
+            // Read Logic
+            val readNext = fun(): String {
+                var line: String
+                while(true) {
+                    line = reader.readLine()
+                    //if(line == null) throw?
+                    if(line.startsWith("#")) continue
+                    return line
+                }
+            }
+
+            // Database Data
+            var databaseName: String
+            var tableCount: Int
+            readNext().split(":").let {
+                databaseName = it[0]
+                tableCount = Integer.parseInt(it[1])
+            }
+
+            // Create Database
+            val database = KraQLDatabase(databaseName)
+
+            // Read Tables
+            var table: KraQLTable
+            var tablePos = 0
+            var tableName: String
+            var tableFieldCount: Int
+            var tableFieldPos: Int
+            var tableRecordCount: Int
+            var tableRecordPos: Int
+            while(tablePos < tableCount) {
+
+                // Table Data
+                readNext().split(":").let {
+                    tableName = it[0]
+                    tableFieldCount = Integer.parseInt(it[1])
+                    tableRecordCount = Integer.parseInt(it[2])
+                }
+
+                // Create Table
+                table = database.addTable(tableName)
+
+                // Read Fields
+                tableFieldPos = 0
+                while(tableFieldPos < tableFieldCount) {
+
+                    // Field Data
+                    readNext().split(":").let {
+                        table.addField(it[0], KraQLTableFieldType.valueOf(it[1]))
+                    }
+
+                    // Increment Position
+                    tableFieldPos ++
+                }
+
+                // Read Records
+                tableRecordPos = 0
+                while(tableRecordPos < tableRecordCount) {
+
+                    // Record Data
+                    readNext().split(":").let {
+                        //table.addRecord()
+                        // NOTE: here we need to convert line of data into HashMap
+                    }
+
+                    // Increment Position
+                    tableRecordPos ++
+                }
+
+                // Increment Position
+                tablePos ++
+            }
+
+            // Return Database
+            return database
         }
 
         fun resourceLoad(path: String) = (object {}.javaClass.getResource("/$path")).let {

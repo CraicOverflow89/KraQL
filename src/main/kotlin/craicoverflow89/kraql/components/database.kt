@@ -42,8 +42,9 @@ class KraQLDatabase(val name: String, private val tableList: ArrayList<KraQLTabl
     fun toFile() = ArrayList<String>().apply {
 
         // Database Data
-        add("db:$name")
-        // NOTE: might want to add settings like "[setting1,setting2]"
+        add("$name:${tableList.size}")
+
+        // NOTE: might want to add other settings to the above
 
         // Table Data
         tableList.forEach {

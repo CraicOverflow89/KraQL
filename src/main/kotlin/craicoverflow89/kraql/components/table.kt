@@ -54,11 +54,11 @@ class KraQLTable(private val database: KraQLDatabase, val name: String, private 
     fun toFile() = ArrayList<String>().apply {
 
         // Table Data
-        add("table:$name")
+        add("$name:${fieldList.size}:${recordList.size}")
 
         // Field Data
         fieldList.forEach {
-            add(">" + it.toFile())
+            add(it.toFile())
         }
 
         // Record Data
@@ -91,8 +91,23 @@ enum class KraQLTableFieldType {
         }
     }
 
+    companion object {
+
+        fun valueOf(value: String): KraQLTableFieldType {
+            return when(value) {
+                "BOOLEAN" -> BOOLEAN
+                "INTEGER" -> INTEGER
+                "STRING" -> STRING
+                "TIMESTAMP" -> TIMESTAMP
+                else -> throw KraQLTableFieldTypeParseException(value)
+            }
+        }
+
+    }
+
 }
 
+class KraQLTableFieldTypeParseException(value: String): Exception("Failed to parse field type from value $value!")
 class KraQLTableInsertFieldException(field: String): Exception("Must supply data for the $field field!")
 class KraQLTableInsertTypeException(field: String, type: KraQLTableFieldType): Exception("Must supply data of type $type for the $field field!")
 
