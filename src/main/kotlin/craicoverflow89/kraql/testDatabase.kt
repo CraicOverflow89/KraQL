@@ -45,15 +45,6 @@ fun main() {
     // Save Database
     KraQLApplication.saveDatabase(db, "C:/Users/jamie/Software/Kotlin/KraQL/data/")
 
-    // TEST QUERY
-    /*db.query("""
-        INSERT INTO test (name)
-        VALUES ('James')
-    """)*/
-
-    // Debug Database
-    println(db)
-
     // Load Database
     val db2 = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/${db.name}.kqld")
 

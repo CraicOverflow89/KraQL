@@ -1,7 +1,7 @@
 package craicoverflow89.kraql.components
 
-import craicoverflow89.kraql.queries.parser.KraQLQueryLexer
-import craicoverflow89.kraql.queries.parser.KraQLQueryParser
+import craicoverflow89.kraql.queries.KraQLQueryLexer
+import craicoverflow89.kraql.queries.KraQLQueryParser
 import org.antlr.v4.runtime.ANTLRInputStream
 import org.antlr.v4.runtime.CommonTokenStream
 
