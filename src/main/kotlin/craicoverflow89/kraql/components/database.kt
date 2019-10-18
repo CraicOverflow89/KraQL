@@ -51,6 +51,6 @@ class KraQLDatabase(val name: String, private val tableList: ArrayList<KraQLTabl
         }
     }
 
-    override fun toString() = "{name: $name}"
+    override fun toString() = "{name: $name, tables: ${if(tableList.isEmpty()) "none" else "[" + tableList.joinToString {it.name} + "]"}}"
 
 }

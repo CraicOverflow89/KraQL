@@ -1,13 +1,16 @@
 package craicoverflow89.kraql.queries.parser.components
 
-abstract class KraQLQuery {
+abstract class KraQLQuery(protected val tableName: String) {
+
     //
 }
 
-class KraQLQueryInsert(val tableName: String): KraQLQuery() {
+class KraQLQueryInsert(tableName: String): KraQLQuery(tableName) {
+
     //
 }
 
-class KraQLQuerySelect(val tableName: String): KraQLQuery() {
+class KraQLQuerySelect(tableName: String): KraQLQuery(tableName) {
+
     //
 }

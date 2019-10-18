@@ -1,10 +1,13 @@
 package craicoverflow89.kraql.components
 
-class KraQLTable(private val database: KraQLDatabase, private val name: String, private val fieldList: ArrayList<KraQLTableField> = arrayListOf(), private val recordList: ArrayList<KraQLTableRecord> = arrayListOf()) {
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
-    init {
-        fieldList.add(KraQLTableField(this, "id", KraQLTableFieldType.INTEGER))
-    }
+class KraQLTable(private val database: KraQLDatabase, val name: String, private val fieldList: ArrayList<KraQLTableField> = arrayListOf(), private val recordList: ArrayList<KraQLTableRecord> = arrayListOf()) {
+
+    var idCount = -1
+    // NOTE: need to restore this from file, when loading instead of creating
 
     fun addField(name: String, type: KraQLTableFieldType): KraQLTableField {
         // NOTE: what about existing records?
@@ -22,26 +25,31 @@ class KraQLTable(private val database: KraQLDatabase, private val name: String, 
     fun addRecord(data: HashMap<String, Any>) {
 
         // Validate Fields
-        fieldList.filter {
-            it.name != "id"
-        }.forEach {
+        fieldList.forEach {
 
             // Validate Exists
-            if(!data.containsKey(it.name)) throw KraQLTableInsertException(it.name)
+            if(!data.containsKey(it.name)) throw KraQLTableInsertFieldException(it.name)
 
-            // NOTE: and validate type?
+            // Validate Type
+            if(!it.type.accepts(data[it.name]!!)) throw KraQLTableInsertTypeException(it.name, it.type)
         }
 
-        // NOTE: so here we need to create a record that is valid for the current fields
+        // NOTE: we are currently not implementing default field values (so aren't required in data)
 
         // Generate ID
-        val id = 0
+        val id = idGenerate()
+        // NOTE: come back to this
 
         // Add Record
         recordList.add(KraQLTableRecord(id, data))
     }
 
     fun get(): KraQLResult = KraQLResult(recordList)
+
+    private fun idGenerate(): Int {
+        idCount ++
+        return idCount
+    }
 
     fun toFile() = ArrayList<String>().apply {
 
@@ -59,11 +67,11 @@ class KraQLTable(private val database: KraQLDatabase, private val name: String, 
         }
     }
 
-    override fun toString() = "{database: ${database.name}, name: $name}"
+    override fun toString() = "{name: $name, database: ${database.name}, fields: ${if(fieldList.isEmpty()) "none" else "[" + fieldList.joinToString {it.name} + "]"}}"
 
 }
 
-class KraQLTableField(private val table: KraQLTable, val name: String, private val type: KraQLTableFieldType) {
+class KraQLTableField(private val table: KraQLTable, val name: String, val type: KraQLTableFieldType) {
 
     fun toFile() = "$name:${type.name}"
 
@@ -72,10 +80,21 @@ class KraQLTableField(private val table: KraQLTable, val name: String, private v
 }
 
 enum class KraQLTableFieldType {
-    BOOLEAN, INTEGER, STRING, TIMESTAMP
+    BOOLEAN, INTEGER, STRING, TIMESTAMP;
+
+    fun accepts(value: Any): Boolean {
+        return when(this) {
+            BOOLEAN -> value is Boolean
+            INTEGER -> value is Integer
+            STRING -> value is String
+            TIMESTAMP -> value is Date
+        }
+    }
+
 }
 
-class KraQLTableInsertException(field: String): Exception("Must supply data for the $field field!")
+class KraQLTableInsertFieldException(field: String): Exception("Must supply data for the $field field!")
+class KraQLTableInsertTypeException(field: String, type: KraQLTableFieldType): Exception("Must supply data of type $type for the $field field!")
 
 class KraQLTableRecord(val id: Int, val data: HashMap<String, Any>) {
 
@@ -85,10 +104,8 @@ class KraQLTableRecord(val id: Int, val data: HashMap<String, Any>) {
         }
     }.joinToString(",")
 
-    override fun toString() = ArrayList<String>().apply {
-        data.forEach {
-            add(it.value.toString())
-        }
-    }.toString()
+    override fun toString() = "{id: $id, data: {${data.map {
+        it.toString()
+    }.joinToString(", ")}}}"
 
 }

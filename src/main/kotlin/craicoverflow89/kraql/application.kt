@@ -3,6 +3,7 @@ package craicoverflow89.kraql
 import craicoverflow89.kraql.components.KraQLDatabase
 import java.io.File
 import java.io.FileNotFoundException
+import kotlin.system.exitProcess
 
 class KraQLApplication {
 
@@ -16,7 +17,7 @@ class KraQLApplication {
             val file = File(path)
             if(!file.exists()) {
                 throw FileNotFoundException("The path to the database was invalid!")
-                System.exit(-1)
+                exitProcess(-1)
             }
 
             // Read Data
@@ -54,6 +55,7 @@ class KraQLApplication {
 
                 // Database Data
                 addAll(database.toFile())
+
             }.joinToString("\n"))
         }
 
