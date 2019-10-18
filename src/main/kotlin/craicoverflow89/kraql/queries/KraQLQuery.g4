@@ -16,16 +16,26 @@ query returns [KraQLQuery result]
 
 queryInsert returns [KraQLQueryInsert result]
     :   'INSERT INTO' tableName = string '(' queryInsertFields ')'
-        'VALUES' '()'
-        {$result = new KraQLQueryInsert($tableName.text);}
+        'VALUES' '(' queryInsertRecords ')'
+        {$result = new KraQLQueryInsert($tableName.text, $queryInsertFields.result, $queryInsertRecords.result);}
     ;
 
 queryInsertFields returns [ArrayList<String> result]
-    @init {ArrayList<String> result = new ArrayList();}
-    :   field1 = string {result.add($field1.text);}
+    @init {ArrayList<String> fields = new ArrayList();}
+    :   field1 = string {fields.add($field1.text);}
         (
-            field2 = string {result.add($field2.text);}
+            field2 = string {fields.add($field2.text);}
         )*
+        {$result = fields;}
+    ;
+
+queryInsertRecords returns [ArrayList<String> result]
+    @init {ArrayList<String> fields = new ArrayList();}
+    :   field1 = string {fields.add($field1.text);}
+        (
+            field2 = string {fields.add($field2.text);}
+        )*
+        {$result = fields;}
     ;
 
 querySelect returns [KraQLQuerySelect result]

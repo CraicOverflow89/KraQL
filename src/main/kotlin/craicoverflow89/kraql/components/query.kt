@@ -5,9 +5,9 @@ abstract class KraQLQuery(protected val tableName: String) {
     //
 }
 
-class KraQLQueryInsert(tableName: String): KraQLQuery(tableName) {
+class KraQLQueryInsert(tableName: String, private val fieldList: ArrayList<String>, private val recordList: ArrayList<String>): KraQLQuery(tableName) {
 
-    //
+    override fun toString() = "{table: $tableName, fieldList: $fieldList, recordList: $recordList}"
 }
 
 class KraQLQuerySelect(tableName: String): KraQLQuery(tableName) {
