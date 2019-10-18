@@ -109,6 +109,7 @@ enum class KraQLTableFieldType {
 class KraQLTableFieldTypeParseException(value: String): Exception("Failed to parse field type from value $value!")
 class KraQLTableInsertFieldException(field: String): Exception("Must supply data for the $field field!")
 class KraQLTableInsertTypeException(field: String, type: KraQLTableFieldType): Exception("Must supply data of type $type for the $field field!")
+class KraQLTableNotFoundException(name: String): Exception("Could not find a table named $name!")
 
 class KraQLTableRecord(val id: Int, val data: HashMap<String, Any>) {
 

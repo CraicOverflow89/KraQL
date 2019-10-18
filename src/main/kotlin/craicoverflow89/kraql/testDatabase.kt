@@ -52,7 +52,6 @@ fun main() {
     println(db2)
 
     // Debug Table
-    //println(db2.)
-    // NOTE: need to get table from database
+    println(db2.getTable("test"))
 
 }

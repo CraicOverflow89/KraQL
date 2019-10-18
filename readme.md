@@ -17,5 +17,5 @@ Lightweight data storage library.
 
 ### File Types
 
- - everything in a database is stored in a **kqld** file
+ - everything in a database is stored in a **kqld** archive file (use ZIP library)
  - queries to be performed are read from **kqlq** files
