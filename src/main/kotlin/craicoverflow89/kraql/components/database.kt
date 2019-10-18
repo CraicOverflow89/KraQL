@@ -7,6 +7,10 @@ import org.antlr.v4.runtime.CommonTokenStream
 
 class KraQLDatabase(val name: String, private val tableList: ArrayList<KraQLTable> = arrayListOf()) {
 
+    fun addAccount(name: String, password: String) = KraQLAccount(this, name, password)
+
+    fun addAccount(name: String, password: String, permissions: HashMap<KraQLAccountPermission, Boolean>) = KraQLAccount(this, name, password, permissions)
+
     fun addTable(name: String): KraQLTable {
 
         // Create Table
