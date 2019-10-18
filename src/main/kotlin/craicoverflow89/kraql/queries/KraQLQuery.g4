@@ -2,7 +2,7 @@ grammar KraQLQuery;
 
 @header
 {
-    import craicoverflow89.kraql.queries.parser.components.*;
+    import craicoverflow89.kraql.components.*;
 }
 
 // Parser Rules

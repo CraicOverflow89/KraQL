@@ -38,7 +38,6 @@ class KraQLTable(private val database: KraQLDatabase, val name: String, private 
 
         // Generate ID
         val id = idGenerate()
-        // NOTE: come back to this
 
         // Add Record
         recordList.add(KraQLTableRecord(id, data))

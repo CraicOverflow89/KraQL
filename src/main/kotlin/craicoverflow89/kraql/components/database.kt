@@ -40,7 +40,7 @@ class KraQLDatabase(val name: String, private val tableList: ArrayList<KraQLTabl
         // Parse Query
         val lexer = KraQLQueryLexer(ANTLRInputStream(query))
         val parser = KraQLQueryParser(CommonTokenStream(lexer))
-        //parser.query().result;
+        //parser.query().result
     }
 
     fun toFile() = ArrayList<String>().apply {

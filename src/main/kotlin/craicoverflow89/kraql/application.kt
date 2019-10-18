@@ -1,6 +1,7 @@
 package craicoverflow89.kraql
 
 import craicoverflow89.kraql.components.KraQLDatabase
+import craicoverflow89.kraql.components.KraQLQueryNotFoundException
 import craicoverflow89.kraql.components.KraQLTable
 import craicoverflow89.kraql.components.KraQLTableFieldType
 import java.io.File
@@ -100,6 +101,19 @@ class KraQLApplication {
 
             // Return Database
             return database
+        }
+
+        fun loadQuery(path: String) {
+
+            // Validate Exists
+            val file = File(path)
+            if(!file.exists()) throw KraQLQueryNotFoundException()
+
+            // Read Query
+            val query = file.readText()
+
+            // Parse Query
+            // NOTE: invoke the query parser
         }
 
         fun resourceLoad(path: String) = (object {}.javaClass.getResource("/$path")).let {
