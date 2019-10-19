@@ -24,7 +24,7 @@ queryInsertFields returns [ArrayList<String> result]
     @init {ArrayList<String> fields = new ArrayList();}
     :   field1 = string {fields.add($field1.text);}
         (
-            field2 = string {fields.add($field2.text);}
+            COMMA field2 = string {fields.add($field2.text);}
         )*
         {$result = fields;}
     ;
@@ -33,7 +33,7 @@ queryInsertRecords returns [ArrayList<String> result]
     @init {ArrayList<String> fields = new ArrayList();}
     :   field1 = string {fields.add($field1.text);}
         (
-            field2 = string {fields.add($field2.text);}
+            COMMA field2 = string {fields.add($field2.text);}
         )*
         {$result = fields;}
     ;
@@ -51,5 +51,6 @@ string
     ;
 
 // Lexer Rules
+COMMA: ',';
 WHITESPACE: [ \t\r\n]+ -> skip;
 CHAR: .;

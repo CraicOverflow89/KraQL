@@ -10,21 +10,27 @@ fun main() {
     // Load Database
     val db = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/test.kqld")
 
+    // Fetch Table
+    val table = db.getTable("test")
+
     // Test Query
     val input = """
-        INSERT INTO test (name)
-        VALUES ('James')
+        INSERT INTO test (name, dob)
+        VALUES ('James', '')
     """
 
     // Parse Query
     val lexer = KraQLQueryLexer(ANTLRInputStream(input))
     val parser = KraQLQueryParser(CommonTokenStream(lexer))
-    val query = parser.query().result)
+    val query = parser.query().result
+
+    // Debug Data
+    println(query.toMap())
 
     // Add Record
-    db.getTable(query.tableName).addRecord(query.data)
+    table.addRecord(query.toMap())
 
     // Debug Table
-    println(db.getTable(query.tableName))
+    println(table)
 
 }
