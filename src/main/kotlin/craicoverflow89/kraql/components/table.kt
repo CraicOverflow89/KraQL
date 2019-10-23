@@ -74,7 +74,17 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
         }
     }
 
-    fun get(): KraQLResult = KraQLResult(recordList)
+    fun get(fieldList: ArrayList<KraQLTableField>? = null): KraQLResult {
+
+        // NOTE: many things to consider when it comes to arguments
+
+        // Return Result
+        return KraQLResult(if(fieldList != null) fieldList!! else getFieldList(), recordList)
+    }
+
+    private fun getFieldList(): ArrayList<KraQLTableField> {
+        return fieldList
+    }
 
     private fun idGenerate(): Int {
         idCount ++

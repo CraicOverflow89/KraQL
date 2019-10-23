@@ -70,7 +70,9 @@ class KraQLQuerySelect(tableName: String, private val fieldList: ArrayList<Strin
         val table = getTable(database)
 
         // Return Result
-        return KraQLQueryResult(table, "Selected x records!", table.get())
+        return KraQLQueryResult(table, "Selected x records!")
+        // NOTE: need to create KraQLResult
+        //       result must be limited by fields in select
     }
 
     override fun toMap(): HashMap<String, Any> {

@@ -50,12 +50,10 @@ querySelect returns [KraQLQuerySelect result]
 querySelectFields returns [ArrayList<String> result]
     @init {ArrayList<String> fields = new ArrayList();}
     :   (
-            PAREN1
             field1 = string {fields.add($field1.text);}
             (
                 COMMA field2 = string {fields.add($field2.text);}
             )*
-            PAREN2
         |
             '*'
         )
