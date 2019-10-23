@@ -39,11 +39,25 @@ queryInsertRecords returns [ArrayList<String> result]
     ;
 
 querySelect returns [KraQLQuerySelect result]
-    :   'SELECT' 'term'
+    :   'SELECT' querySelectFields
         'FROM' tableName = string
         ('WHERE')?
         ('ORDER BY')?
-        {$result = new KraQLQuerySelect($tableName.text);}
+        ('LIMIT')?
+        {$result = new KraQLQuerySelect($tableName.text, $querySelectFields.result);}
+    ;
+
+querySelectFields returns [ArrayList<String> result]
+    @init {ArrayList<String> fields = new ArrayList();}
+    :   (
+            field1 = string {fields.add($field1.text);}
+            (
+                COMMA field2 = string {fields.add($field2.text);}
+            )*
+        |
+            '*'
+        )
+        {$result = fields;}
     ;
 
 string

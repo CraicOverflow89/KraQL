@@ -19,6 +19,7 @@ Lightweight data storage library.
  - there are no constraints for fields
  - there are no indexes
  - the current table record parser does not handle escaped pipes
+ - query result description is saying `x` instead of count
 
 ### File Types
 

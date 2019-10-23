@@ -5,7 +5,7 @@ abstract class KraQLQuery(protected val tableName: String) {
     abstract fun invoke(database: KraQLDatabase): KraQLQueryResult
 
     protected fun getTable(database: KraQLDatabase): KraQLTable {
-        return KraQLTable(database, tableName)
+        return database.getTable(tableName)
     }
 
     abstract fun toMap(): HashMap<String, Any>
@@ -55,26 +55,29 @@ class KraQLQueryInsert(tableName: String, private val fieldList: ArrayList<Strin
 
 class KraQLQueryNotFoundException: Exception("Could not find a query at the location supplied!")
 
-class KraQLQueryResult(private val table: KraQLTable, private val result: String) {
+class KraQLQueryResult(private val table: KraQLTable, private val description: String, private val result: KraQLResult? = null) {
     // NOTE: come back to property visibility later on
 
-    override fun toString() = "{database: ${table.database.name}, table: ${table.name}, result: $result}"
+    override fun toString() = "{database: ${table.database.name}, table: ${table.name}, description: $description, result: $result}"
 
 }
 
-class KraQLQuerySelect(tableName: String): KraQLQuery(tableName) {
+class KraQLQuerySelect(tableName: String, private val fieldList: ArrayList<String>): KraQLQuery(tableName) {
 
     override fun invoke(database: KraQLDatabase): KraQLQueryResult {
 
         // Fetch Table
         val table = getTable(database)
 
-        // TEMP RETURN
-        return KraQLQueryResult(table, "Selected x records!")
+        // Return Result
+        return KraQLQueryResult(table, "Selected x records!", table.get())
     }
 
     override fun toMap(): HashMap<String, Any> {
         return hashMapOf()
     }
+
+    override fun toString() = "{table: $tableName, fieldList: $fieldList}"
+    // NOTE: remove this after debugging?
 
 }
