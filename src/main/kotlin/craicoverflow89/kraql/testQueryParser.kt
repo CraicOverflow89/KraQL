@@ -2,6 +2,12 @@ package craicoverflow89.kraql
 
 fun main() {
 
+    //testInsert()
+    testSelect()
+}
+
+fun testInsert() {
+
     // Load Database
     val db = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/test.kqld")
 
@@ -16,5 +22,18 @@ fun main() {
 
     // Debug Table
     println(db.getTable("test").get())
+}
 
+fun testSelect() {
+
+    // Load Database
+    val db = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/test.kqld")
+
+    // Test Query
+    val result = db.query("""
+        SELECT * FROM test
+    """)
+
+    // Debug Result
+    println(result)
 }

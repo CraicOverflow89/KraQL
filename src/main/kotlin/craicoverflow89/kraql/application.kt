@@ -124,7 +124,7 @@ class KraQLApplication {
             //       that method is currently loading from file instead of taking query string and params
         }
 
-        fun resourceLoad(path: String) = (object {}.javaClass.getResource("/$path")).let {
+        private fun resourceLoad(path: String) = (object {}.javaClass.getResource("/$path")).let {
 
             // Validate Resource
             it ?: throw KraQLResourceException(path)
