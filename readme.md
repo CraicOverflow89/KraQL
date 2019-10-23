@@ -15,6 +15,9 @@ Lightweight data storage library.
 ### Issues
 
  - the timestamp parser is just returning `Date()` for now
+ - there are no default values for fields
+ - there are no constraints for fields
+ - there are no indexes
 
 ### File Types
 

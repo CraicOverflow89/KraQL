@@ -4,6 +4,10 @@ import craicoverflow89.kraql.components.KraQLDatabase
 import craicoverflow89.kraql.components.KraQLQueryNotFoundException
 import craicoverflow89.kraql.components.KraQLTable
 import craicoverflow89.kraql.components.KraQLTableFieldType
+import craicoverflow89.kraql.queries.KraQLQueryLexer
+import craicoverflow89.kraql.queries.KraQLQueryParser
+import org.antlr.v4.runtime.ANTLRInputStream
+import org.antlr.v4.runtime.CommonTokenStream
 import java.io.File
 import java.io.FileNotFoundException
 import kotlin.system.exitProcess
@@ -54,6 +58,7 @@ class KraQLApplication {
             var tableName: String
             var tableFieldCount: Int
             var tableFieldPos: Int
+            var tableFieldList: ArrayList<String>
             var tableRecordCount: Int
             var tableRecordPos: Int
             while(tablePos < tableCount) {
@@ -70,11 +75,13 @@ class KraQLApplication {
 
                 // Read Fields
                 tableFieldPos = 0
+                tableFieldList = ArrayList<String>()
                 while(tableFieldPos < tableFieldCount) {
 
                     // Field Data
                     readNext().split(":").let {
                         table.addField(it[0], KraQLTableFieldType.valueOf(it[1]))
+                        tableFieldList.add(it[0])
                     }
 
                     // Increment Position
@@ -86,10 +93,14 @@ class KraQLApplication {
                 while(tableRecordPos < tableRecordCount) {
 
                     // Record Data
-                    readNext().split(":").let {
-                        //table.addRecord()
-                        // NOTE: here we need to convert line of data into HashMap
+                    readNext().split("|").let {
+                        table.addRecord(HashMap<String, Any>().apply {
+                            tableFieldList.forEachIndexed {fieldPos, fieldName ->
+                                put(fieldName, it[fieldPos])
+                            }
+                        })
                     }
+                    // NOTE: need to make sure we split on | but not \| parts
 
                     // Increment Position
                     tableRecordPos ++
@@ -109,11 +120,8 @@ class KraQLApplication {
             val file = File(path)
             if(!file.exists()) throw KraQLQueryNotFoundException()
 
-            // Read Query
-            val query = file.readText()
-
-            // Parse Query
-            // NOTE: invoke the query parser
+            // NOTE: need to see about passing the file.readText() value to current database
+            //       that method is currently loading from file instead of taking query string and params
         }
 
         fun resourceLoad(path: String) = (object {}.javaClass.getResource("/$path")).let {

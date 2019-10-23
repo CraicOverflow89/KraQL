@@ -7,6 +7,29 @@ import java.util.Date
 
 fun main() {
 
+    //test1()
+    test2()
+
+}
+
+fun test1() {
+
+    // Load Database
+    val db = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/test.kqld")
+
+    // Debug Database
+    println(db)
+
+    // Debug Table
+    println(db.getTable("test"))
+
+    // Debug Data
+    println(db.getTable("test").get())
+
+}
+
+fun test2() {
+
     // Create Database
     val db = KraQLDatabase("test")
 
@@ -49,9 +72,13 @@ fun main() {
     val db2 = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/${db.name}.kqld")
 
     // Debug Database
+    println("\nLoaded Database")
     println(db2)
 
     // Debug Table
     println(db2.getTable("test"))
+
+    // Debug Data
+    println(db2.getTable("test").get())
 
 }

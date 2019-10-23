@@ -4,7 +4,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class KraQLTable(private val database: KraQLDatabase, val name: String, private val fieldList: ArrayList<KraQLTableField> = arrayListOf(), private val recordList: ArrayList<KraQLTableRecord> = arrayListOf()) {
+class KraQLTable(val database: KraQLDatabase, val name: String, private val fieldList: ArrayList<KraQLTableField> = arrayListOf(), private val recordList: ArrayList<KraQLTableRecord> = arrayListOf()) {
 
     var idCount = -1
     // NOTE: need to restore this from file, when loading instead of creating
@@ -81,6 +81,16 @@ class KraQLTable(private val database: KraQLDatabase, val name: String, private 
         return idCount
     }
 
+    fun save() {
+
+        // TEMP DEBUG
+        println("KraQLTable.save()")
+        println(this.get())
+
+        // Save Database
+        database.save()
+    }
+
     fun toFile() = ArrayList<String>().apply {
 
         // Table Data
@@ -92,8 +102,10 @@ class KraQLTable(private val database: KraQLDatabase, val name: String, private 
         }
 
         // Record Data
-        recordList.forEach {
-            add(it.toFile())
+        recordList.forEach {record ->
+            add(fieldList.map {
+                record.toFile(it)
+            }.joinToString("|"))
         }
     }
 
@@ -144,11 +156,7 @@ class KraQLTableNotFoundException(name: String): Exception("Could not find a tab
 
 class KraQLTableRecord(val id: Int, val data: HashMap<String, Any>) {
 
-    fun toFile() = ArrayList<String>().apply {
-        data.forEach {
-            add(it.value.toString())
-        }
-    }.joinToString(",")
+    fun toFile(field: KraQLTableField) = data[field.name]!!.toString().replace("|", "\\|")
 
     override fun toString() = "{id: $id, data: {${data.map {
         it.toString()

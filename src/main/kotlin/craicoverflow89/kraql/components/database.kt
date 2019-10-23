@@ -1,9 +1,11 @@
 package craicoverflow89.kraql.components
 
+import craicoverflow89.kraql.KraQLApplication
 import craicoverflow89.kraql.queries.KraQLQueryLexer
 import craicoverflow89.kraql.queries.KraQLQueryParser
 import org.antlr.v4.runtime.ANTLRInputStream
 import org.antlr.v4.runtime.CommonTokenStream
+import java.io.File
 
 class KraQLDatabase(val name: String, private val tableList: ArrayList<KraQLTable> = arrayListOf()) {
 
@@ -50,20 +52,21 @@ class KraQLDatabase(val name: String, private val tableList: ArrayList<KraQLTabl
         return table
     }
 
-    fun query(query: String): KraQLResult {
+    fun query(value: String): KraQLQueryResult {
 
         // Parse Query
-        val lexer = KraQLQueryLexer(ANTLRInputStream(query))
+        val lexer = KraQLQueryLexer(ANTLRInputStream(value))
         val parser = KraQLQueryParser(CommonTokenStream(lexer))
         val query = parser.query().result
 
         // Invoke Query
-        // NOTE: so here we need to create a result based on query result (type)
-        //       how best to handle returns for insert, create, delete, etc..?
-        //       should be a standardised resultset that might contain data..?
+        return query.invoke(this)
+    }
 
-        // TEMP RETURN
-        return KraQLResult(arrayListOf())
+    fun save() {
+
+        // TEMP INVOKE
+        KraQLApplication.saveDatabase(this, "C:/Users/jamie/Software/Kotlin/KraQL/data/")
     }
 
     fun toFile() = ArrayList<String>().apply {
