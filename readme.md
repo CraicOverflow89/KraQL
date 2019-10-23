@@ -18,6 +18,7 @@ Lightweight data storage library.
  - there are no default values for fields
  - there are no constraints for fields
  - there are no indexes
+ - the current table record parser does not handle escaped pipes
 
 ### File Types
 
