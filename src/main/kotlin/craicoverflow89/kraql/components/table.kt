@@ -31,7 +31,11 @@ class KraQLTable(private val database: KraQLDatabase, val name: String, private 
             if(!data.containsKey(it.name)) throw KraQLTableInsertFieldException(it.name)
 
             // Validate Type
-            if(!it.type.accepts(data[it.name]!!)) throw KraQLTableInsertTypeException(it.name, it.type)
+            if(!it.type.accepts(data[it.name]!!)) {
+
+                // Convert Data
+                data[it.name] = convertData(it, data[it.name].toString())
+            }
         }
 
         // NOTE: we are currently not implementing default field values (so aren't required in data)
@@ -41,6 +45,33 @@ class KraQLTable(private val database: KraQLDatabase, val name: String, private 
 
         // Add Record
         recordList.add(KraQLTableRecord(id, data))
+    }
+
+    fun convertData(field: KraQLTableField, value: String): Any {
+
+        // Boolean Parser
+        val parseBoolean = fun(value: String): Boolean {
+            return when(value) {
+                "true" -> true
+                "false" -> false
+                else -> throw KraQLTableInsertTypeException(field.name, field.type)
+            }
+        }
+
+        // Timestamp Parser
+        val parseTimestamp = fun(value: String): Date {
+
+            // TEMP RETURN
+            return Date()
+        }
+
+        // Type Conversion
+        return when(field.type) {
+            KraQLTableFieldType.BOOLEAN -> parseBoolean(value)
+            KraQLTableFieldType.INTEGER -> Integer.parseInt(value)
+            KraQLTableFieldType.TIMESTAMP -> parseTimestamp(value)
+            else -> value
+        }
     }
 
     fun get(): KraQLResult = KraQLResult(recordList)

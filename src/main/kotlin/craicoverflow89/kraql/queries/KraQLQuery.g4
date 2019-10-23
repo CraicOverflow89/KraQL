@@ -15,8 +15,8 @@ query returns [KraQLQuery result]
     ;
 
 queryInsert returns [KraQLQueryInsert result]
-    :   'INSERT INTO' tableName = string '(' queryInsertFields ')'
-        'VALUES' '(' queryInsertRecords ')'
+    :   'INSERT INTO' tableName = string PAREN1 queryInsertFields PAREN2
+        'VALUES' PAREN1 queryInsertRecords PAREN2
         {$result = new KraQLQueryInsert($tableName.text, $queryInsertFields.result, $queryInsertRecords.result);}
     ;
 
@@ -52,5 +52,7 @@ string
 
 // Lexer Rules
 COMMA: ',';
+PAREN1: '(';
+PAREN2: ')';
 WHITESPACE: [ \t\r\n]+ -> skip;
 CHAR: .;

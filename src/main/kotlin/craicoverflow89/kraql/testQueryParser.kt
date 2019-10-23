@@ -16,7 +16,7 @@ fun main() {
     // Test Query
     val input = """
         INSERT INTO test (name, dob)
-        VALUES ('James', '')
+        VALUES ('James', '2019-10-19 08.32.00.000')
     """
 
     // Parse Query
@@ -24,13 +24,19 @@ fun main() {
     val parser = KraQLQueryParser(CommonTokenStream(lexer))
     val query = parser.query().result
 
+    // Debug Query
+    println(query)
+
+    // Parse Data
+    val data = query.toMap()
+
     // Debug Data
-    println(query.toMap())
+    println(data)
 
     // Add Record
-    table.addRecord(query.toMap())
+    table.addRecord(data)
 
     // Debug Table
-    println(table)
+    println(table.get())
 
 }

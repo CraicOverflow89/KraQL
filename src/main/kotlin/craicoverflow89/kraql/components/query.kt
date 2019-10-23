@@ -3,6 +3,7 @@ package craicoverflow89.kraql.components
 abstract class KraQLQuery(val tableName: String) {
 
     abstract fun toMap(): HashMap<String, Any>
+
 }
 
 class KraQLQueryInsert(tableName: String, private val fieldList: ArrayList<String>, private val recordList: ArrayList<String>): KraQLQuery(tableName) {
@@ -27,6 +28,7 @@ class KraQLQueryInsert(tableName: String, private val fieldList: ArrayList<Strin
     }
 
     override fun toString() = "{table: $tableName, fieldList: $fieldList, recordList: $recordList}"
+    // NOTE: remove this after debugging?
 
 }
 
