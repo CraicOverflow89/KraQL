@@ -14,9 +14,9 @@ Lightweight data storage library.
 
 ### Issues
 
- - none
+ - the timestamp parser is just returning `Date()` for now
 
 ### File Types
 
  - everything in a database is stored in a **kqld** archive file (use ZIP library)
- - queries to be performed are read from **kqlq** files
+ - queries to be performed can be read from **kqlq** files or passed as strings
