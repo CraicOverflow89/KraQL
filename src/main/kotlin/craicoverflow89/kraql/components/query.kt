@@ -69,8 +69,14 @@ class KraQLQuerySelect(tableName: String, private val fieldList: ArrayList<Strin
         // Fetch Table
         val table = getTable(database)
 
+        // Parse Fields
+        val fields = table.getFields(fieldList)
+
+        // Fetch Data
+        val result = table.get(fields)
+
         // Return Result
-        return KraQLQueryResult(table, "Selected x records!")
+        return KraQLQueryResult(table, "Selected x records!", result)
         // NOTE: need to create KraQLResult
         //       result must be limited by fields in select
     }
