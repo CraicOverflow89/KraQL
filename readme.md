@@ -8,6 +8,7 @@ Lightweight data storage library.
 ### Tasks
 
  - database loader
+ - params for all queries to be passed separately to query string
  - shell interface
  - docs
 
