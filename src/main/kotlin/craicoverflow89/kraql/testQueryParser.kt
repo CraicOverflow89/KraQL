@@ -33,7 +33,8 @@ fun testSelect() {
     val result = db.query("""
         SELECT name, dob
         FROM test
-        WHERE name LIKE '%s%'
+        WHERE name LIKE 'J%'
+        ORDER BY name DESC
     """)
 
     // Debug Result

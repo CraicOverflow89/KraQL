@@ -44,9 +44,9 @@ querySelect returns [KraQLQuerySelect result]
     :   'SELECT' querySelectFields
         'FROM' tableName = string
         clauseWhere
-        ('ORDER BY')?
+        clauseOrder
         ('LIMIT')?
-        {$result = new KraQLQuerySelect($tableName.text, $querySelectFields.result, $clauseWhere.result);}
+        {$result = new KraQLQuerySelect($tableName.text, $querySelectFields.result, $clauseWhere.result, $clauseOrder.result);}
     ;
 
 querySelectFields returns [ArrayList<String> result]
@@ -92,6 +92,35 @@ clauseWhereEquals returns [KraQLQueryConditionEquals result]
 clauseWhereLike returns [KraQLQueryConditionLike result]
     :   field = string 'LIKE' value = stringQuoteSingle
         {$result = new KraQLQueryConditionLike($field.text, $value.result);}
+    ;
+
+clauseOrder returns [ArrayList<KraQLQueryOrder> result]
+    @init {ArrayList<KraQLQueryOrder> order = new ArrayList();}
+    :   (
+            'ORDER BY'
+            clause1 = clauseOrderAny
+            {order.add($clause1.result);}
+            (
+                COMMA clause2 = clauseOrderAny
+                {order.add($clause2.result);}
+            )*
+        )?
+        {$result = order;}
+    ;
+
+clauseOrderAny returns [KraQLQueryOrder result]
+    :   field = string clauseOrderDirection
+        {$result = new KraQLQueryOrder($field.text, $clauseOrderDirection.result);}
+    ;
+
+clauseOrderDirection returns [KraQLQueryOrderDirection result]
+    :   {KraQLQueryOrderDirection direction = KraQLQueryOrderDirection.ASCENDING;}
+        (
+            'ASC'
+        |
+            'DESC' {direction = KraQLQueryOrderDirection.DESCENDING;}
+        )
+        {$result = direction;}
     ;
 
 stringQuoteSingle returns [String result]

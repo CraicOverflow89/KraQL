@@ -74,19 +74,26 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
         }
     }
 
-    fun get(fieldList: ArrayList<KraQLTableField> = arrayListOf(), conditionList: List<KraQLQueryCondition> = arrayListOf()): KraQLResult {
+    fun get(fieldList: ArrayList<KraQLTableField> = arrayListOf(), conditionList: ArrayList<Pair<KraQLTableField, KraQLQueryCondition>> = arrayListOf(), orderList: List<KraQLQueryOrder>): KraQLResult {
 
         // NOTE: many things to consider when it comes to arguments
 
         // Default Fields
         if(fieldList.isEmpty()) fieldList.addAll(getFields())
 
+        // Map Conditions
+        val conditions = conditionList.map {
+            it.second
+        }
+        // NOTE: could change things to avoid having to do this
+
         // Return Result
         return KraQLResult(fieldList, recordList.filter {
-            it.where(this, conditionList)
+            it.where(this, conditions)
         }.map {
             it.withFields(fieldList)
         })
+        // NOTE: need to reduce recordList to new list having applied the Order By sorting
     }
 
     fun getFields(): ArrayList<KraQLTableField> {

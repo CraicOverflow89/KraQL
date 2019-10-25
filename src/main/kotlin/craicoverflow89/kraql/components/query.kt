@@ -85,7 +85,13 @@ class KraQLQueryConditionLike(field: String, private val value: String): KraQLQu
 
 }
 
-class KraQLQuerySelect(tableName: String, private val fieldList: ArrayList<String>, private val conditionList: List<KraQLQueryCondition>): KraQLQuery(tableName) {
+class KraQLQueryOrder(field: String, direction: KraQLQueryOrderDirection)
+
+enum class KraQLQueryOrderDirection {
+    ASCENDING, DESCENDING
+}
+
+class KraQLQuerySelect(tableName: String, private val fieldList: ArrayList<String>, private val conditionList: List<KraQLQueryCondition>, private val orderList: List<KraQLQueryOrder>): KraQLQuery(tableName) {
 
     override fun invoke(database: KraQLDatabase): KraQLQueryResult {
 
@@ -98,11 +104,8 @@ class KraQLQuerySelect(tableName: String, private val fieldList: ArrayList<Strin
         // Parse Conditions
         val conditions = table.parseConditions(conditionList)
 
-        // TEMP DEBUG
-        println(conditions)
-
         // Fetch Data
-        val data = table.get(fields, conditionList)
+        val data = table.get(fields, conditions, orderList)
 
         // Return Result
         return KraQLQueryResult(table, "Selected ${data.getRecordCount()} records!", data)
