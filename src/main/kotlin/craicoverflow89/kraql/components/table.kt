@@ -74,7 +74,7 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
         }
     }
 
-    fun get(fieldList: ArrayList<KraQLTableField> = arrayListOf(), conditionMap: HashMap<String, String> = hashMapOf()): KraQLResult {
+    fun get(fieldList: ArrayList<KraQLTableField> = arrayListOf(), conditionList: List<KraQLQueryCondition> = arrayListOf()): KraQLResult {
 
         // NOTE: many things to consider when it comes to arguments
 
@@ -83,8 +83,7 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
 
         // Return Result
         return KraQLResult(fieldList, recordList.filter {
-            it.whereEquals(this, conditionMap)
-            // NOTE: probably want to rename that back to where IF passing type of condition (eg: ==, >, <, !=)
+            it.where(this, conditionList)
         }.map {
             it.withFields(fieldList)
         })
@@ -105,6 +104,12 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
     private fun idGenerate(): Int {
         idCount ++
         return idCount
+    }
+
+    fun parseConditions(conditionList: List<KraQLQueryCondition>) = ArrayList<Pair<KraQLTableField, KraQLQueryCondition>>().apply {
+        conditionList.forEach {
+            add(Pair(getFields(listOf(it.field))[0], it))
+        }
     }
 
     fun save() {
@@ -192,15 +197,10 @@ class KraQLTableRecord(val id: Int, val data: HashMap<String, Any>) {
         }
     })
 
-    fun whereEquals(table: KraQLTable, conditionMap: HashMap<String, String>) = conditionMap.all {condition ->
-
-        // Match Field
-        val field = table.getFields().firstOrNull {
-            it.name == condition.key
-        } ?: throw KraQLTableFieldNotFoundException(table.name, condition.key)
+    fun where(table: KraQLTable, conditionList: List<KraQLQueryCondition>) = conditionList.all {condition ->
 
         // Apply Condition
-        data[field.name] == condition.value
+        condition.matches(data[condition.field].toString()!!)
     }
 
 }

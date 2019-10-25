@@ -43,10 +43,10 @@ queryInsertRecords returns [ArrayList<String> result]
 querySelect returns [KraQLQuerySelect result]
     :   'SELECT' querySelectFields
         'FROM' tableName = string
-        querySelectWhere
+        clauseWhere
         ('ORDER BY')?
         ('LIMIT')?
-        {$result = new KraQLQuerySelect($tableName.text, $querySelectFields.result, $querySelectWhere.result);}
+        {$result = new KraQLQuerySelect($tableName.text, $querySelectFields.result, $clauseWhere.result);}
     ;
 
 querySelectFields returns [ArrayList<String> result]
@@ -62,17 +62,36 @@ querySelectFields returns [ArrayList<String> result]
         {$result = fields;}
     ;
 
-querySelectWhere returns [HashMap<String, String> result]
-    :   {$result = new HashMap();}
-        (
+clauseWhere returns [ArrayList<KraQLQueryCondition> result]
+    @init {ArrayList<KraQLQueryCondition> conditions = new ArrayList();}
+    :   (
             'WHERE'
-            field1 = string EQUALS value1 = stringQuoteSingle
-            {$result.put($field1.text, $value1.result);}
+            clause1 = clauseWhereAny
+            {conditions.add($clause1.result);}
             (
-                COMMA field2 = string EQUALS value2 = stringQuoteSingle
-                {$result.put($field2.text, $value2.result);}
+                COMMA clause2 = clauseWhereAny
+                {conditions.add($clause2.result);}
             )*
         )?
+        {$result = conditions;}
+    ;
+
+clauseWhereAny returns [KraQLQueryCondition result]
+    :   (
+            clauseWhereEquals {$result = $clauseWhereEquals.result;}
+        |
+            clauseWhereLike {$result = $clauseWhereLike.result;}
+        )
+    ;
+
+clauseWhereEquals returns [KraQLQueryConditionEquals result]
+    :   field = string EQUALS value = stringQuoteSingle
+        {$result = new KraQLQueryConditionEquals($field.text, $value.result);}
+    ;
+
+clauseWhereLike returns [KraQLQueryConditionLike result]
+    :   field = string 'LIKE' value = stringQuoteSingle
+        {$result = new KraQLQueryConditionLike($field.text, $value.result);}
     ;
 
 stringQuoteSingle returns [String result]

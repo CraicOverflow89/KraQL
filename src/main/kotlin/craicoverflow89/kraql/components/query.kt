@@ -59,7 +59,32 @@ class KraQLQueryResult(private val table: KraQLTable, private val description: S
 
 }
 
-class KraQLQuerySelect(tableName: String, private val fieldList: ArrayList<String>, private val conditionMap: HashMap<String, String>): KraQLQuery(tableName) {
+abstract class KraQLQueryCondition(val field: String, private val value: String) {
+
+    abstract fun matches(input: String): Boolean
+
+    override fun toString() = "{field: $field, value: $value}"
+
+}
+
+class KraQLQueryConditionEquals(field: String, private val value: String): KraQLQueryCondition(field, value) {
+
+    override fun matches(input: String): Boolean {
+        return input == value
+    }
+
+}
+
+class KraQLQueryConditionLike(field: String, private val value: String): KraQLQueryCondition(field, value) {
+
+    override fun matches(input: String): Boolean {
+        return input == value
+        // NOTE: this is where we parse the % char for special behaviour
+    }
+
+}
+
+class KraQLQuerySelect(tableName: String, private val fieldList: ArrayList<String>, private val conditionList: List<KraQLQueryCondition>): KraQLQuery(tableName) {
 
     override fun invoke(database: KraQLDatabase): KraQLQueryResult {
 
@@ -69,13 +94,17 @@ class KraQLQuerySelect(tableName: String, private val fieldList: ArrayList<Strin
         // Parse Fields
         val fields = table.getFields(fieldList)
 
+        // Parse Conditions
+        val conditions = table.parseConditions(conditionList)
+
+        // TEMP DEBUG
+        println(conditions)
+
         // Fetch Data
-        val data = table.get(fields, conditionMap)
+        val data = table.get(fields, conditionList)
 
         // Return Result
         return KraQLQueryResult(table, "Selected ${data.getRecordCount()} records!", data)
-        // NOTE: need to create KraQLResult
-        //       result must be limited by fields in select
         // NOTE: records should not be pluralised if result.data.size == 1
     }
 
