@@ -81,15 +81,10 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
         // Default Fields
         if(fieldList.isEmpty()) fieldList.addAll(getFields())
 
-        // TEMP DEBUG
-        println("KraQLTable.get($fieldList)")
-
         // Return Result
         return KraQLResult(fieldList, recordList.map {
             it.withFields(fieldList)
-            // NOTE: the KraQLTableRecord needs to be adjusted to only show fields in fieldList
         })
-        // NOTE: not sure if this is where we should be passing fieldList (constructor is ignoring at the moment)
     }
 
     private fun getFields(): ArrayList<KraQLTableField> {
@@ -97,8 +92,10 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
     }
 
     fun getFields(value: List<String>) = ArrayList<KraQLTableField>().apply {
-        fieldList.forEach {
-            if(value.contains(it.name)) add(it)
+        value.forEach {fieldName ->
+            add(fieldList.firstOrNull {
+                it.name == fieldName
+            } ?: throw KraQLTableFieldNotFoundException(name, fieldName))
         }
     }
 
@@ -108,10 +105,6 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
     }
 
     fun save() {
-
-        // TEMP DEBUG
-        println("KraQLTable.save()")
-        println(this.get())
 
         // Save Database
         database.save()
@@ -146,6 +139,8 @@ class KraQLTableField(private val table: KraQLTable, val name: String, val type:
     override fun toString() = "{name: $name, type: $type}"
 
 }
+
+class KraQLTableFieldNotFoundException(table: String, field: String): Exception("No field named $field exists in $table table!")
 
 enum class KraQLTableFieldType {
     BOOLEAN, INTEGER, STRING, TIMESTAMP;
