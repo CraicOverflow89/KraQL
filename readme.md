@@ -19,7 +19,8 @@ Lightweight data storage library.
  - there are no constraints for fields
  - there are no indexes
  - the current table record parser does not handle escaped pipes
- - query result description is saying `x` instead of count
+ - some result descriptions are saying `x` instead of count
+ - how to handle select/update/delete where id (rather than fields) match condition?
 
 ### File Types
 

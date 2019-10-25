@@ -146,6 +146,27 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
 
     override fun toString() = "{name: $name, database: ${database.name}, fields: ${if(fieldList.isEmpty()) "none" else "[" + fieldList.joinToString {"{name:${it.name}, type:${it.type}}"} + "]"}}"
 
+    fun update(updateList: List<KraQLQueryUpdatePair>, conditionList: List<KraQLQueryCondition>) {
+
+        // Create Result
+        val records = ArrayList<KraQLTableRecord>().apply {
+            recordList.forEach {
+                add(KraQLTableRecord(it.id, HashMap<String, Any>().apply {
+                    fieldList.forEach {k, v ->
+                        put(k, v)
+                    }
+                }))
+                // NOTE: apply transformations to it.data based on updateList and conditionList
+                //       if conditionList gets a match then perform update operation
+                //       else just take it.data
+            }
+        }
+
+        // Update Records
+        recordList.removeAll(recordList)
+        recordList.addAll(records)
+    }
+
 }
 
 class KraQLTableField(private val table: KraQLTable, val name: String, val type: KraQLTableFieldType) {

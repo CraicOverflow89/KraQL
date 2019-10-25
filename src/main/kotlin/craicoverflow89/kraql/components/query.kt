@@ -127,8 +127,7 @@ class KraQLQueryUpdate(tableName: String, private val updateList: List<KraQLQuer
         val table = getTable(database)
 
         // Update Data
-        //table.update(updateList, conditionList)
-        // NOTE: need to write this
+        table.update(updateList, conditionList)
 
         // Return Result
         return KraQLQueryResult(table, "Updated x records!")
