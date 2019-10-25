@@ -56,7 +56,8 @@ fun testUpdate() {
 
     // Debug Data
     println(db.query("""
-        SELECT *
+        SELECT name
         FROM test
+        WHERE name LIKE 'Josh%'
     """))
 }

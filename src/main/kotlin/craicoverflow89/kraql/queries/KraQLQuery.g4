@@ -13,6 +13,8 @@ query returns [KraQLQuery result]
             queryInsert {$result = $queryInsert.result;}
         |
             querySelect {$result = $querySelect.result;}
+        |
+            queryUpdate {$result = $queryUpdate.result;}
         ) EOF
     ;
 
@@ -60,6 +62,24 @@ querySelectFields returns [ArrayList<String> result]
             '*'
         )
         {$result = fields;}
+    ;
+
+queryUpdate returns [KraQLQueryUpdate result]
+    :   'UPDATE' tableName = string
+        'SET' queryUpdateFields
+        clauseWhere
+        {$result = new KraQLQueryUpdate($tableName.text, $queryUpdateFields.result, $clauseWhere.result);}
+    ;
+
+queryUpdateFields returns [ArrayList<KraQLQueryUpdatePair> result]
+    @init {ArrayList<KraQLQueryUpdatePair> pairs = new ArrayList();}
+    :   field1 = string EQUALS value1 = stringQuoteSingle
+        {pairs.add(new KraQLQueryUpdatePair($field1.text, $value1.result));}
+        (
+            COMMA field2 = string EQUALS value2 = stringQuoteSingle
+            {pairs.add(new KraQLQueryUpdatePair($field2.text, $value2.result));}
+        )*
+        {$result = pairs;}
     ;
 
 clauseWhere returns [ArrayList<KraQLQueryCondition> result]

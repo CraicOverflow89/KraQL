@@ -115,5 +115,31 @@ class KraQLQuerySelect(tableName: String, private val fieldList: ArrayList<Strin
     override fun toMap(): HashMap<String, Any> {
         return hashMapOf()
     }
+    // NOTE: this isn't correct - where is it being called?
 
 }
+
+class KraQLQueryUpdate(tableName: String, private val updateList: List<KraQLQueryUpdatePair>, private val conditionList: List<KraQLQueryCondition>): KraQLQuery(tableName) {
+
+    override fun invoke(database: KraQLDatabase): KraQLQueryResult {
+
+        // Fetch Table
+        val table = getTable(database)
+
+        // Update Data
+        //table.update(updateList, conditionList)
+        // NOTE: need to write this
+
+        // Return Result
+        return KraQLQueryResult(table, "Updated x records!")
+        // NOTE: edit the count later
+    }
+
+    override fun toMap(): HashMap<String, Any> {
+        return hashMapOf()
+    }
+    // NOTE: this isn't correct - where is it being called?
+
+}
+
+class KraQLQueryUpdatePair(private val field: String, private val value: String)
