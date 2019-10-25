@@ -3,7 +3,8 @@ package craicoverflow89.kraql
 fun main() {
 
     //testInsert()
-    testSelect()
+    //testSelect()
+    testUpdate()
 }
 
 fun testInsert() {
@@ -39,4 +40,23 @@ fun testSelect() {
 
     // Debug Result
     println(result)
+}
+
+fun testUpdate() {
+
+    // Load Database
+    val db = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/test.kqld")
+
+    // Test Query
+    db.query("""
+        UPDATE test
+        SET name = 'JoshNew'
+        WHERE name = 'Josh'
+    """)
+
+    // Debug Data
+    println(db.query("""
+        SELECT *
+        FROM test
+    """))
 }

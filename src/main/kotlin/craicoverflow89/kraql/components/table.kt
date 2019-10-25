@@ -63,6 +63,7 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
 
             // TEMP RETURN
             return Date()
+            // NOTE: still need to write this
         }
 
         // Type Conversion
@@ -74,7 +75,7 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
         }
     }
 
-    fun get(fieldList: ArrayList<KraQLTableField> = arrayListOf(), conditionList: ArrayList<Pair<KraQLTableField, KraQLQueryCondition>> = arrayListOf(), orderList: List<KraQLQueryOrder>): KraQLResult {
+    fun get(fieldList: ArrayList<KraQLTableField> = arrayListOf(), conditionList: ArrayList<Pair<KraQLTableField, KraQLQueryCondition>> = arrayListOf(), orderList: List<KraQLQueryOrder> = listOf()): KraQLResult {
 
         // NOTE: many things to consider when it comes to arguments
 
