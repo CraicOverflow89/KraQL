@@ -31,8 +31,9 @@ fun testSelect() {
 
     // Test Query
     val result = db.query("""
-        SELECT name, dob, age
+        SELECT name, dob
         FROM test
+        WHERE name = 'James'
     """)
 
     // Debug Result

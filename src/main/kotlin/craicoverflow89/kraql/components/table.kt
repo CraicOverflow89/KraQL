@@ -74,7 +74,7 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
         }
     }
 
-    fun get(fieldList: ArrayList<KraQLTableField> = arrayListOf()): KraQLResult {
+    fun get(fieldList: ArrayList<KraQLTableField> = arrayListOf(), conditionMap: HashMap<String, String> = hashMapOf()): KraQLResult {
 
         // NOTE: many things to consider when it comes to arguments
 
@@ -82,12 +82,15 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
         if(fieldList.isEmpty()) fieldList.addAll(getFields())
 
         // Return Result
-        return KraQLResult(fieldList, recordList.map {
+        return KraQLResult(fieldList, recordList.filter {
+            it.whereEquals(this, conditionMap)
+            // NOTE: probably want to rename that back to where IF passing type of condition (eg: ==, >, <, !=)
+        }.map {
             it.withFields(fieldList)
         })
     }
 
-    private fun getFields(): ArrayList<KraQLTableField> {
+    fun getFields(): ArrayList<KraQLTableField> {
         return fieldList
     }
 
@@ -188,5 +191,16 @@ class KraQLTableRecord(val id: Int, val data: HashMap<String, Any>) {
             put(it.name, data[it.name]!!)
         }
     })
+
+    fun whereEquals(table: KraQLTable, conditionMap: HashMap<String, String>) = conditionMap.all {condition ->
+
+        // Match Field
+        val field = table.getFields().firstOrNull {
+            it.name == condition.key
+        } ?: throw KraQLTableFieldNotFoundException(table.name, condition.key)
+
+        // Apply Condition
+        data[field.name] == condition.value
+    }
 
 }

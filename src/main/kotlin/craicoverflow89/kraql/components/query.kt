@@ -48,9 +48,6 @@ class KraQLQueryInsert(tableName: String, private val fieldList: ArrayList<Strin
         return data
     }
 
-    override fun toString() = "{table: $tableName, fieldList: $fieldList, recordList: $recordList}"
-    // NOTE: remove this after debugging?
-
 }
 
 class KraQLQueryNotFoundException: Exception("Could not find a query at the location supplied!")
@@ -62,7 +59,7 @@ class KraQLQueryResult(private val table: KraQLTable, private val description: S
 
 }
 
-class KraQLQuerySelect(tableName: String, private val fieldList: ArrayList<String>): KraQLQuery(tableName) {
+class KraQLQuerySelect(tableName: String, private val fieldList: ArrayList<String>, private val conditionMap: HashMap<String, String>): KraQLQuery(tableName) {
 
     override fun invoke(database: KraQLDatabase): KraQLQueryResult {
 
@@ -73,7 +70,7 @@ class KraQLQuerySelect(tableName: String, private val fieldList: ArrayList<Strin
         val fields = table.getFields(fieldList)
 
         // Fetch Data
-        val data = table.get(fields)
+        val data = table.get(fields, conditionMap)
 
         // Return Result
         return KraQLQueryResult(table, "Selected ${data.getRecordCount()} records!", data)
@@ -85,8 +82,5 @@ class KraQLQuerySelect(tableName: String, private val fieldList: ArrayList<Strin
     override fun toMap(): HashMap<String, Any> {
         return hashMapOf()
     }
-
-    override fun toString() = "{table: $tableName, fieldList: $fieldList}"
-    // NOTE: remove this after debugging?
 
 }

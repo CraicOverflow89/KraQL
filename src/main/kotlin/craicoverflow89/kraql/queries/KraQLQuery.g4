@@ -3,6 +3,8 @@ grammar KraQLQuery;
 @header
 {
     import craicoverflow89.kraql.components.*;
+    import java.lang.StringBuffer;
+    import java.util.HashMap;
 }
 
 // Parser Rules
@@ -41,10 +43,10 @@ queryInsertRecords returns [ArrayList<String> result]
 querySelect returns [KraQLQuerySelect result]
     :   'SELECT' querySelectFields
         'FROM' tableName = string
-        ('WHERE')?
+        querySelectWhere
         ('ORDER BY')?
         ('LIMIT')?
-        {$result = new KraQLQuerySelect($tableName.text, $querySelectFields.result);}
+        {$result = new KraQLQuerySelect($tableName.text, $querySelectFields.result, $querySelectWhere.result);}
     ;
 
 querySelectFields returns [ArrayList<String> result]
@@ -60,6 +62,31 @@ querySelectFields returns [ArrayList<String> result]
         {$result = fields;}
     ;
 
+querySelectWhere returns [HashMap<String, String> result]
+    :   {$result = new HashMap();}
+        (
+            'WHERE'
+            field1 = string EQUALS value1 = stringQuoteSingle
+            {$result.put($field1.text, $value1.result);}
+            (
+                COMMA field2 = string EQUALS value2 = stringQuoteSingle
+                {$result.put($field2.text, $value2.result);}
+            )*
+        )?
+    ;
+
+stringQuoteSingle returns [String result]
+    :   {StringBuffer buffer = new StringBuffer();}
+        QUOTE_SINGLE
+        string1 = string {buffer.append($string1.text);}
+        (
+            SPACE string2 = string
+            {buffer.append(" " + $string2.text);}
+        )*
+        QUOTE_SINGLE
+        {$result = buffer.toString();}
+    ;
+
 string
     :   CHAR+
     ;
@@ -68,5 +95,8 @@ string
 COMMA: ',';
 PAREN1: '(';
 PAREN2: ')';
+EQUALS: '=';
 WHITESPACE: [ \t\r\n]+ -> skip;
-CHAR: .;
+SPACE: ' ';
+QUOTE_SINGLE: '\'';
+CHAR: ~['];
