@@ -55,10 +55,10 @@ class KraQLQueryInsert(tableName: String, private val fieldList: ArrayList<Strin
 
 class KraQLQueryNotFoundException: Exception("Could not find a query at the location supplied!")
 
-class KraQLQueryResult(private val table: KraQLTable, private val description: String, private val result: KraQLResult? = null) {
+class KraQLQueryResult(private val table: KraQLTable, private val description: String, private val data: KraQLResult? = null) {
     // NOTE: come back to property visibility later on
 
-    override fun toString() = "{database: ${table.database.name}, table: ${table.name}, description: $description, result: $result}"
+    override fun toString() = "{database: ${table.database.name}, table: ${table.name}, description: $description, data: $data}"
 
 }
 
@@ -73,12 +73,13 @@ class KraQLQuerySelect(tableName: String, private val fieldList: ArrayList<Strin
         val fields = table.getFields(fieldList)
 
         // Fetch Data
-        val result = table.get(fields)
+        val data = table.get(fields)
 
         // Return Result
-        return KraQLQueryResult(table, "Selected x records!", result)
+        return KraQLQueryResult(table, "Selected ${data.getRecordCount()} records!", data)
         // NOTE: need to create KraQLResult
         //       result must be limited by fields in select
+        // NOTE: records should not be pluralised if result.data.size == 1
     }
 
     override fun toMap(): HashMap<String, Any> {

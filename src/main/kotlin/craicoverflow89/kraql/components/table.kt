@@ -74,25 +74,32 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
         }
     }
 
-    fun get(fieldList: List<KraQLTableField>? = null): KraQLResult {
+    fun get(fieldList: ArrayList<KraQLTableField> = arrayListOf()): KraQLResult {
 
         // NOTE: many things to consider when it comes to arguments
 
+        // Default Fields
+        if(fieldList.isEmpty()) fieldList.addAll(getFields())
+
+        // TEMP DEBUG
+        println("KraQLTable.get($fieldList)")
+
         // Return Result
-        return KraQLResult(if(fieldList != null) fieldList!! else getFields(), recordList)
+        return KraQLResult(fieldList, recordList.map {
+            it.withFields(fieldList)
+            // NOTE: the KraQLTableRecord needs to be adjusted to only show fields in fieldList
+        })
+        // NOTE: not sure if this is where we should be passing fieldList (constructor is ignoring at the moment)
     }
 
     private fun getFields(): ArrayList<KraQLTableField> {
         return fieldList
     }
 
-    fun getFields(value: List<String>): List<KraQLTableField> {
-
-        // Iterate Values
-        return fieldList.filter {
-            value.contains(it.name)
+    fun getFields(value: List<String>) = ArrayList<KraQLTableField>().apply {
+        fieldList.forEach {
+            if(value.contains(it.name)) add(it)
         }
-        // NOTE: very temporary
     }
 
     private fun idGenerate(): Int {
@@ -180,5 +187,11 @@ class KraQLTableRecord(val id: Int, val data: HashMap<String, Any>) {
     override fun toString() = "{id: $id, data: {${data.map {
         it.toString()
     }.joinToString(", ")}}}"
+
+    fun withFields(fieldList: List<KraQLTableField>) = KraQLTableRecord(id, HashMap<String, Any>().apply {
+        fieldList.forEach {
+            put(it.name, data[it.name]!!)
+        }
+    })
 
 }
