@@ -78,8 +78,9 @@ class KraQLQueryConditionEquals(field: String, private val value: String): KraQL
 class KraQLQueryConditionLike(field: String, private val value: String): KraQLQueryCondition(field, value) {
 
     override fun matches(input: String): Boolean {
-        return input == value
-        // NOTE: this is where we parse the % char for special behaviour
+
+        return input.matches(Regex("^" + value.replace("%", ".*") + "$"))
+        // VERY TEMPORARY
     }
 
 }
