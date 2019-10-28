@@ -5,15 +5,16 @@ import craicoverflow89.kraql.components.KraQLDatabase
 fun main() {
 
     // Load Database
-    val db = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/test.kqld")
-    db.setDebugSaveIgnore(true)
+    val db = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/test.kqld"). apply {
+        setDebugSaveIgnore(true)
+    }
 
     //testInsert(db)
     // NOTE: encountering an NPE here due to inverted comma issues in the parser
 
     //testSelect(db)
     //testUpdate(db)
-    //testDeleteFrom(db)
+    testDeleteFrom(db)
     //testDeleteTable(db)
 
     // NOTE: need to check all of these different operations based on account permissions
