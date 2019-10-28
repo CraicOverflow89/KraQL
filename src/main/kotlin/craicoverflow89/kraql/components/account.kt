@@ -37,6 +37,9 @@ class KraQLAccount(val database: KraQLDatabase, val name: String, val password: 
 
 enum class KraQLAccountPermission {
     DATABASE_CREATE, DATABASE_DELETE, TABLE_CREATE, TABLE_DELETE;
+    // NOTE: the nature of the system has suggested that it's more useful to ignore DATABASE stuff
+    //       and focus on TABLE_DELETE (tables vs records?), TABLE_INSERT, TABLE_UPDATE, etc...
+    //       will need INDEX permissions, regardless
 
     companion object {
 

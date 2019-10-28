@@ -16,7 +16,12 @@ class KraQLApplication {
 
     companion object {
 
-        fun getVersion() = resourceLoad("version").readText()
+        private val reservedList = resourceLoad("reserved").readLines()
+        private val version = resourceLoad("version").readText()
+
+        fun getVersion() = version
+
+        fun isReserved(value: String) = reservedList.contains(value)
 
         fun loadDatabase(path: String): KraQLDatabase {
 

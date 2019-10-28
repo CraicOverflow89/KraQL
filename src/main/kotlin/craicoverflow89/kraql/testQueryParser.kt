@@ -11,15 +11,17 @@ fun main() {
 
     // NOTE: all conditions are currently unable to specify ID field
     // NOTE: there is currently no capability of OR in conditions or parens to determine groups
+    // NOTE: not currently allowing for comments within the query string
 
     //testInsert(db)
     // NOTE: encountering an NPE here due to inverted comma issues in the parser
 
     //testSelect(db)
     //testUpdate(db)
-    testDeleteFrom(db)
+    //testDeleteFrom(db)
     //testDeleteTable(db)
 
+    // NOTE: need to check all of these different operations without WHERE clauses
     // NOTE: need to check all of these different operations based on account permissions
 }
 
@@ -51,7 +53,7 @@ fun testDeleteTable(db: KraQLDatabase) {
 
     // Test Query
     db.query("""
-        DELETE test
+        DELETE TABLE test
     """)
 
     // NOTE: need to check permissions here
