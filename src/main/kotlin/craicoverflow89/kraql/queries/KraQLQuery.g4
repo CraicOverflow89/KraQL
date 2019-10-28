@@ -40,7 +40,7 @@ queryCreateTableFields returns [ArrayList<KraQLQueryCreateTableField> result]
     ;
 
 queryCreateTableField returns [KraQLQueryCreateTableField result]
-    :   name = string SPACE type = string
+    :   name = string EQUALS type = string
         {$result = new KraQLQueryCreateTableField($name.text, $type.text);}
     ;
 
@@ -185,8 +185,7 @@ stringQuoteSingle returns [String result]
         QUOTE_SINGLE
         string1 = string {buffer.append($string1.text);}
         (
-            SPACE string2 = string
-            {buffer.append(" " + $string2.text);}
+            string2 = string {buffer.append(" " + $string2.text);}
         )*
         QUOTE_SINGLE
         {$result = buffer.toString();}
@@ -203,5 +202,4 @@ PAREN2: ')';
 EQUALS: '=';
 WHITESPACE: [ \t\r\n]+ -> skip;
 CHAR: ~[ ',];
-SPACE: ' ';
 QUOTE_SINGLE: '\'';

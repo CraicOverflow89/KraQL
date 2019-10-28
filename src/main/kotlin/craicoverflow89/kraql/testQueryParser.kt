@@ -31,8 +31,8 @@ fun testCreateTable(db: KraQLDatabase) {
     // Test Query
     println(db.query("""
         CREATE TABLE test2 (
-            name STRING,
-            age INT
+            name = STRING,
+            age = INT
         )
     """))
 }
