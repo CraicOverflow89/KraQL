@@ -9,6 +9,9 @@ import java.io.File
 
 class KraQLDatabase(val name: String, private val tableList: ArrayList<KraQLTable> = arrayListOf()) {
 
+    // Debug: IGNORE SAVES
+    private var debugSaveIgnore = false
+
     fun addAccount(name: String, password: String) = KraQLAccount(this, name, password)
 
     fun addAccount(name: String, password: String, permissions: HashMap<KraQLAccountPermission, Boolean>) = KraQLAccount(this, name, password, permissions)
@@ -36,6 +39,8 @@ class KraQLDatabase(val name: String, private val tableList: ArrayList<KraQLTabl
         // Return Table
         return table
     }
+
+    fun getDebugSaveIgnore() = debugSaveIgnore
 
     fun getTable(name: String): KraQLTable {
         // NOTE: this could all be condensed
@@ -65,8 +70,15 @@ class KraQLDatabase(val name: String, private val tableList: ArrayList<KraQLTabl
 
     fun save() {
 
+        // Debug Ignore
+        if(debugSaveIgnore) return
+
         // TEMP INVOKE
         KraQLApplication.saveDatabase(this, "C:/Users/jamie/Software/Kotlin/KraQL/data/")
+    }
+
+    fun setDebugSaveIgnore(value: Boolean) {
+        debugSaveIgnore = value
     }
 
     fun toFile() = ArrayList<String>().apply {

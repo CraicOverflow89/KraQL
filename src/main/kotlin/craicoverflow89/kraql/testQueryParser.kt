@@ -1,22 +1,25 @@
 package craicoverflow89.kraql
 
+import craicoverflow89.kraql.components.KraQLDatabase
+
 fun main() {
 
-    //testInsert()
+    // Load Database
+    val db = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/test.kqld")
+    db.setDebugSaveIgnore(true)
+
+    //testInsert(db)
     // NOTE: encountering an NPE here due to inverted comma issues in the parser
 
-    //testSelect()
-    //testUpdate()
-    testDeleteFrom()
-    //testDeleteTable()
+    //testSelect(db)
+    //testUpdate(db)
+    //testDeleteFrom(db)
+    //testDeleteTable(db)
 
     // NOTE: need to check all of these different operations based on account permissions
 }
 
-fun testDeleteFrom() {
-
-    // Load Database
-    val db = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/test.kqld")
+fun testDeleteFrom(db: KraQLDatabase) {
 
     // Debug Data
     println(db.query("""
@@ -37,10 +40,7 @@ fun testDeleteFrom() {
     """).getData())
 }
 
-fun testDeleteTable() {
-
-    // Load Database
-    val db = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/test.kqld")
+fun testDeleteTable(db: KraQLDatabase) {
 
     // Debug Tables
     // NOTE: need to make it easy to select list of tables via query
@@ -60,10 +60,7 @@ fun testDeleteTable() {
     // NOTE: expecting this to throw
 }
 
-fun testInsert() {
-
-    // Load Database
-    val db = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/test.kqld")
+fun testInsert(db: KraQLDatabase) {
 
     // Test Query
     val result = db.query("""
@@ -78,10 +75,7 @@ fun testInsert() {
     println(db.getTable("test").get())
 }
 
-fun testSelect() {
-
-    // Load Database
-    val db = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/test.kqld")
+fun testSelect(db: KraQLDatabase) {
 
     // Test Query
     println(db.query("""
@@ -92,10 +86,7 @@ fun testSelect() {
     """).getData())
 }
 
-fun testUpdate() {
-
-    // Load Database
-    val db = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/test.kqld")
+fun testUpdate(db: KraQLDatabase) {
 
     // Debug Data
     println(db.query("""
