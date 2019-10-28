@@ -150,15 +150,27 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
 
         // Create Result
         val records = ArrayList<KraQLTableRecord>().apply {
-            recordList.forEach {
-                add(KraQLTableRecord(it.id, HashMap<String, Any>().apply {
-                    fieldList.forEach {k, v ->
-                        put(k, v)
+            recordList.forEach {record ->
+                add(KraQLTableRecord(record.id, HashMap<String, Any>().apply {
+                    fieldList.forEach {field ->
+                        put(field.name, record.data[field.name]!!.let {existingValue ->
+
+                            // Find Update
+                            updateList.firstOrNull {
+                                it.field == field.name
+                            }.let {
+
+                                // Update Value
+                                if(it != null && conditionList.all {condition ->
+                                    condition.matches(record.data[condition.field]!!.toString())
+                                }) it.value
+
+                                // Existing Value
+                                else existingValue
+                            }
+                        })
                     }
                 }))
-                // NOTE: apply transformations to it.data based on updateList and conditionList
-                //       if conditionList gets a match then perform update operation
-                //       else just take it.data
             }
         }
 

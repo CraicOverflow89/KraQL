@@ -12,6 +12,32 @@ abstract class KraQLQuery(protected val tableName: String) {
 
 }
 
+abstract class KraQLQueryCondition(val field: String, private val value: String) {
+
+    abstract fun matches(input: String): Boolean
+
+    override fun toString() = "{field: $field, value: $value}"
+
+}
+
+class KraQLQueryConditionEquals(field: String, private val value: String): KraQLQueryCondition(field, value) {
+
+    override fun matches(input: String): Boolean {
+        return input == value
+    }
+
+}
+
+class KraQLQueryConditionLike(field: String, private val value: String): KraQLQueryCondition(field, value) {
+
+    override fun matches(input: String): Boolean {
+
+        return input.matches(Regex("^" + value.replace("%", ".*") + "$"))
+        // VERY TEMPORARY
+    }
+
+}
+
 class KraQLQueryInsert(tableName: String, private val fieldList: ArrayList<String>, private val recordList: ArrayList<String>): KraQLQuery(tableName) {
 
     override fun invoke(database: KraQLDatabase): KraQLQueryResult {
@@ -52,43 +78,19 @@ class KraQLQueryInsert(tableName: String, private val fieldList: ArrayList<Strin
 
 class KraQLQueryNotFoundException: Exception("Could not find a query at the location supplied!")
 
-class KraQLQueryResult(private val table: KraQLTable, private val description: String, private val data: KraQLResult? = null) {
-    // NOTE: come back to property visibility later on
-
-    override fun toString() = "{database: ${table.database.name}, table: ${table.name}, description: $description, data: $data}"
-
-}
-
-abstract class KraQLQueryCondition(val field: String, private val value: String) {
-
-    abstract fun matches(input: String): Boolean
-
-    override fun toString() = "{field: $field, value: $value}"
-
-}
-
-class KraQLQueryConditionEquals(field: String, private val value: String): KraQLQueryCondition(field, value) {
-
-    override fun matches(input: String): Boolean {
-        return input == value
-    }
-
-}
-
-class KraQLQueryConditionLike(field: String, private val value: String): KraQLQueryCondition(field, value) {
-
-    override fun matches(input: String): Boolean {
-
-        return input.matches(Regex("^" + value.replace("%", ".*") + "$"))
-        // VERY TEMPORARY
-    }
-
-}
-
 class KraQLQueryOrder(field: String, direction: KraQLQueryOrderDirection)
 
 enum class KraQLQueryOrderDirection {
     ASCENDING, DESCENDING
+}
+
+class KraQLQueryResult(private val table: KraQLTable, private val description: String, private val data: KraQLResult? = null) {
+    // NOTE: come back to property visibility later on
+
+    fun getData() = data
+
+    override fun toString() = "{database: ${table.database.name}, table: ${table.name}, description: $description, data: $data}"
+
 }
 
 class KraQLQuerySelect(tableName: String, private val fieldList: ArrayList<String>, private val conditionList: List<KraQLQueryCondition>, private val orderList: List<KraQLQueryOrder>): KraQLQuery(tableName) {
@@ -141,4 +143,8 @@ class KraQLQueryUpdate(tableName: String, private val updateList: List<KraQLQuer
 
 }
 
-class KraQLQueryUpdatePair(private val field: String, private val value: String)
+class KraQLQueryUpdatePair(val field: String, val value: String) {
+
+    override fun toString() = "{field: $field, value: $value}"
+
+}

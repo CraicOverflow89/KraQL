@@ -47,6 +47,12 @@ fun testUpdate() {
     // Load Database
     val db = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/test.kqld")
 
+    // Debug Data
+    println(db.query("""
+        SELECT *
+        FROM test
+    """).getData())
+
     // Test Query
     db.query("""
         UPDATE test
@@ -56,8 +62,7 @@ fun testUpdate() {
 
     // Debug Data
     println(db.query("""
-        SELECT name
+        SELECT *
         FROM test
-        WHERE name LIKE 'Josh%'
-    """))
+    """).getData())
 }
