@@ -9,6 +9,9 @@ fun main() {
         setDebugSaveIgnore(true)
     }
 
+    // NOTE: all conditions are currently unable to specify ID field
+    // NOTE: there is currently no capability of OR in conditions or parens to determine groups
+
     //testInsert(db)
     // NOTE: encountering an NPE here due to inverted comma issues in the parser
 

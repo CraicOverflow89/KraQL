@@ -78,16 +78,18 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
     fun deleteRecords(conditionList: List<KraQLQueryCondition>): Int {
 
         // Create Result
-        var deleteCount = 0
-        val records = ArrayList<KraQLTableRecord>().apply {}
-        // NOTE: only include absolute copies of records (filter operation?)
+        val records = recordList.filter {record ->
+            !conditionList.all {condition ->
+                condition.matches(record.data[condition.field]!!.toString())
+            }
+        }
 
         // Delete Records
         recordList.removeAll(recordList)
         recordList.addAll(records)
 
         // Return Count
-        return deleteCount
+        return recordList.size - records.size
     }
 
     fun get(fieldList: ArrayList<KraQLTableField> = arrayListOf(), conditionList: ArrayList<Pair<KraQLTableField, KraQLQueryCondition>> = arrayListOf(), orderList: List<KraQLQueryOrder> = listOf()): KraQLResult {
