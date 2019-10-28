@@ -146,9 +146,10 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
 
     override fun toString() = "{name: $name, database: ${database.name}, fields: ${if(fieldList.isEmpty()) "none" else "[" + fieldList.joinToString {"{name:${it.name}, type:${it.type}}"} + "]"}}"
 
-    fun update(updateList: List<KraQLQueryUpdatePair>, conditionList: List<KraQLQueryCondition>) {
+    fun update(updateList: List<KraQLQueryUpdatePair>, conditionList: List<KraQLQueryCondition>): Int {
 
         // Create Result
+        var updateCount = 0
         val records = ArrayList<KraQLTableRecord>().apply {
             recordList.forEach {record ->
                 add(KraQLTableRecord(record.id, HashMap<String, Any>().apply {
@@ -163,7 +164,11 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
                                 // Update Value
                                 if(it != null && conditionList.all {condition ->
                                     condition.matches(record.data[condition.field]!!.toString())
-                                }) it.value
+                                }) it.value.apply {
+
+                                    // Increment Count
+                                    updateCount ++
+                                }
 
                                 // Existing Value
                                 else existingValue
@@ -177,6 +182,9 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
         // Update Records
         recordList.removeAll(recordList)
         recordList.addAll(records)
+
+        // Return Count
+        return updateCount
     }
 
 }

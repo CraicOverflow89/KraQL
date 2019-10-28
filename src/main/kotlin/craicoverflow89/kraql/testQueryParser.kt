@@ -2,9 +2,36 @@ package craicoverflow89.kraql
 
 fun main() {
 
-    //testInsert()
+    testInsert()
+    // NOTE: encountering an NPE here due to inverted comma issues in the parser
+
     //testSelect()
-    testUpdate()
+    //testUpdate()
+    //testDelete()
+}
+
+fun testDelete() {
+
+    // Load Database
+    val db = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/test.kqld")
+
+    // Debug Data
+    println(db.query("""
+        SELECT *
+        FROM test
+    """).getData())
+
+    // Test Query
+    db.query("""
+        DELETE FROM test
+        WHERE name = 'Josh'
+    """)
+
+    // Debug Data
+    println(db.query("""
+        SELECT *
+        FROM test
+    """).getData())
 }
 
 fun testInsert() {
@@ -31,15 +58,12 @@ fun testSelect() {
     val db = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/test.kqld")
 
     // Test Query
-    val result = db.query("""
+    println(db.query("""
         SELECT name, dob
         FROM test
         WHERE name LIKE 'J%'
         ORDER BY name DESC
-    """)
-
-    // Debug Result
-    println(result)
+    """).getData())
 }
 
 fun testUpdate() {
@@ -54,11 +78,11 @@ fun testUpdate() {
     """).getData())
 
     // Test Query
-    db.query("""
+    println(db.query("""
         UPDATE test
         SET name = 'JoshNew'
         WHERE name = 'Josh'
-    """)
+    """))
 
     // Debug Data
     println(db.query("""
