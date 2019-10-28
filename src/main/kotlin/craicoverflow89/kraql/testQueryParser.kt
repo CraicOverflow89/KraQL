@@ -1,7 +1,6 @@
 package craicoverflow89.kraql
 
 import craicoverflow89.kraql.components.KraQLDatabase
-import kotlin.system.exitProcess
 
 fun main() {
 
