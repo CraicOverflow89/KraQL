@@ -42,22 +42,19 @@ class KraQLQueryCreateTable(tableName: String, private val fieldList: List<KraQL
 
     override fun invoke(database: KraQLDatabase): KraQLQueryResult {
 
-        // TEMP DEBUG
-        println("KraQLQueryCreateTable.invoke")
-
         // Create Table
         val table = database.addTable(tableName).apply {
 
             // Iterate Fields
             fieldList.forEach {
 
-                // TEMP DEBUG
-                println("field = $it")
-
                 // Create Field
                 this.addField(it.name, KraQLTableFieldType.valueOf(it.type))
             }
         }
+
+        // Save Database
+        database.save()
 
         // Return Result
         return KraQLQueryResult(database, table, "Created the $tableName table!", 1)

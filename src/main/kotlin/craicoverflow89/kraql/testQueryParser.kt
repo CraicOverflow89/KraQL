@@ -1,6 +1,7 @@
 package craicoverflow89.kraql
 
 import craicoverflow89.kraql.components.KraQLDatabase
+import kotlin.system.exitProcess
 
 fun main() {
 
@@ -20,7 +21,7 @@ fun main() {
     //testUpdate(db)
     //testDeleteFrom(db)
     //testDeleteTable(db)
-    testCreateTable(db)
+    //testCreateTable(db)
 
     // NOTE: need to check all of these different operations without WHERE clauses
     // NOTE: need to check all of these different operations based on account permissions
@@ -32,9 +33,12 @@ fun testCreateTable(db: KraQLDatabase) {
     println(db.query("""
         CREATE TABLE test2 (
             name = STRING,
-            age = INT
+            age = INTEGER
         )
     """))
+
+    // Debug Tables
+    println(db.getTables())
 }
 
 fun testDeleteFrom(db: KraQLDatabase) {
