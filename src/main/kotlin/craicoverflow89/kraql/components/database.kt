@@ -1,6 +1,7 @@
 package craicoverflow89.kraql.components
 
 import craicoverflow89.kraql.KraQLApplication
+import craicoverflow89.kraql.KraQLReservedCreateException
 import craicoverflow89.kraql.queries.KraQLQueryLexer
 import craicoverflow89.kraql.queries.KraQLQueryParser
 import org.antlr.v4.runtime.ANTLRInputStream
@@ -12,11 +13,19 @@ class KraQLDatabase(val name: String, private val tableList: ArrayList<KraQLTabl
     // Debug: IGNORE SAVES
     private var debugSaveIgnore = false
 
-    fun addAccount(name: String, password: String) = KraQLAccount(this, name, password)
+    fun addAccount(name: String, password: String, permissions: HashMap<KraQLAccountPermission, Boolean>? = null): KraQLAccount {
 
-    fun addAccount(name: String, password: String, permissions: HashMap<KraQLAccountPermission, Boolean>) = KraQLAccount(this, name, password, permissions)
+        // Reserved Name
+        if(KraQLApplication.isReserved(name)) throw KraQLReservedCreateException(name)
+
+        // Create Account
+        return KraQLAccount(this, name, password, permissions ?: hashMapOf())
+    }
 
     fun addTable(name: String): KraQLTable {
+
+        // Reserved Name
+        if(KraQLApplication.isReserved(name)) throw KraQLReservedCreateException(name)
 
         // Create Table
         val table = KraQLTable(this, name)
@@ -29,6 +38,9 @@ class KraQLDatabase(val name: String, private val tableList: ArrayList<KraQLTabl
     }
 
     fun addTable(name: String, fieldList: ArrayList<KraQLTableField>): KraQLTable {
+
+        // Reserved Name
+        if(KraQLApplication.isReserved(name)) throw KraQLReservedCreateException(name)
 
         // Create Table
         val table = KraQLTable(this, name, fieldList)

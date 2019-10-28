@@ -164,4 +164,6 @@ class KraQLApplication {
 
 }
 
+class KraQLReservedCreateException(term: String): Exception("Could not create an object with the reserved term $term!")
+
 class KraQLResourceException(path: String): Exception("Could not locate resource at $path!")

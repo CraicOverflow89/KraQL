@@ -1,5 +1,7 @@
 package craicoverflow89.kraql.components
 
+import craicoverflow89.kraql.KraQLApplication
+import craicoverflow89.kraql.KraQLReservedCreateException
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -11,6 +13,9 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
 
     fun addField(name: String, type: KraQLTableFieldType): KraQLTableField {
         // NOTE: what about existing records?
+
+        // Reserved Name
+        if(KraQLApplication.isReserved(name)) throw KraQLReservedCreateException(name)
 
         // Create Field
         val field = KraQLTableField(this, name, type)
