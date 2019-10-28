@@ -15,7 +15,7 @@ class KraQLServer(private val port: Int) {
     inner class RequestHandler: HttpHandler {
 
         override fun handle(ex: HttpExchange) {
-            response(ex, "Hello from KraQL Server!")
+            response(ex, "Hello from KraQLServer!")
         }
 
     }

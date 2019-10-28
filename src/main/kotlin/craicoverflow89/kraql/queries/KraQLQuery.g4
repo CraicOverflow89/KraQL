@@ -72,9 +72,9 @@ queryInsertFields returns [ArrayList<String> result]
 
 queryInsertRecords returns [ArrayList<String> result]
     @init {ArrayList<String> fields = new ArrayList();}
-    :   field1 = string {fields.add($field1.text);}
+    :   field1 = stringQuoteSingle {fields.add($field1.result);}
         (
-            COMMA field2 = string {fields.add($field2.text);}
+            COMMA field2 = stringQuoteSingle {fields.add($field2.result);}
         )*
         {$result = fields;}
     ;
@@ -201,5 +201,5 @@ PAREN1: '(';
 PAREN2: ')';
 EQUALS: '=';
 WHITESPACE: [ \t\r\n]+ -> skip;
-CHAR: ~[ ',];
 QUOTE_SINGLE: '\'';
+CHAR: ~[ ',];

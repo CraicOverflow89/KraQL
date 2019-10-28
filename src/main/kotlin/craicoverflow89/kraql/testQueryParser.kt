@@ -13,7 +13,7 @@ fun main() {
     // NOTE: there is currently no capability of OR in conditions or parens to determine groups
     // NOTE: not currently allowing for comments within the query string
 
-    //testInsert(db)
+    testInsert(db)
     // NOTE: encountering an NPE here due to inverted comma issues in the parser
 
     //testSelect(db)
@@ -80,13 +80,10 @@ fun testDeleteTable(db: KraQLDatabase) {
 fun testInsert(db: KraQLDatabase) {
 
     // Test Query
-    val result = db.query("""
+    println(db.query("""
         INSERT INTO test (name, dob)
-        VALUES ('James', '2019-10-19 08.32.00.000')
-    """)
-
-    // Debug Result
-    println(result)
+        VALUES ('Jacob', '2019-10-19 08.32.00.000')
+    """))
 
     // Debug Table
     println(db.getTable("test").get())
