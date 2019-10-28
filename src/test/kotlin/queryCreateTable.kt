@@ -21,7 +21,7 @@ class KraQLQueryCreateTableTest {
             )
         """)
     }*/
-    // NOTE: need to create custom exceptions for parsing issues
+    // NOTE: need to create custom exceptions for parsing syntax issues
 
     /*@Test(expected = KraQLTableFieldTypeParseException::class)
     fun invalidType() {
