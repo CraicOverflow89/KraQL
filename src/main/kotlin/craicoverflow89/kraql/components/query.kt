@@ -42,10 +42,24 @@ class KraQLQueryCreateTable(tableName: String, private val fieldList: List<KraQL
 
     override fun invoke(database: KraQLDatabase): KraQLQueryResult {
 
-        // TEMP TABLE
-        val table = null
+        // TEMP DEBUG
+        println("KraQLQueryCreateTable.invoke")
 
-        // TEMP RETURN
+        // Create Table
+        val table = database.addTable(tableName).apply {
+
+            // Iterate Fields
+            fieldList.forEach {
+
+                // TEMP DEBUG
+                println("field = $it")
+
+                // Create Field
+                this.addField(it.name, KraQLTableFieldType.valueOf(it.type))
+            }
+        }
+
+        // Return Result
         return KraQLQueryResult(database, table, "Created the $tableName table!", 1)
     }
 
@@ -56,7 +70,7 @@ class KraQLQueryCreateTable(tableName: String, private val fieldList: List<KraQL
 
 }
 
-class KraQLQueryCreateTableField(private val name: String, private val type: String) {
+class KraQLQueryCreateTableField(val name: String, val type: String) {
 
     override fun toString() = "{name: $name, type: $type}"
 

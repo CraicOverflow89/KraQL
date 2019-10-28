@@ -40,8 +40,7 @@ queryCreateTableFields returns [ArrayList<KraQLQueryCreateTableField> result]
     ;
 
 queryCreateTableField returns [KraQLQueryCreateTableField result]
-    :   name = string
-        type = string
+    :   name = string SPACE type = string
         {$result = new KraQLQueryCreateTableField($name.text, $type.text);}
     ;
 
@@ -203,6 +202,6 @@ PAREN1: '(';
 PAREN2: ')';
 EQUALS: '=';
 WHITESPACE: [ \t\r\n]+ -> skip;
+CHAR: ~[ ',];
 SPACE: ' ';
 QUOTE_SINGLE: '\'';
-CHAR: ~['];
