@@ -38,6 +38,31 @@ class KraQLQueryConditionLike(field: String, private val value: String): KraQLQu
 
 }
 
+class KraQLQueryDeleteFrom(tableName: String, private val conditionList: List<KraQLQueryCondition>): KraQLQuery(tableName) {
+
+    override fun invoke(database: KraQLDatabase): KraQLQueryResult {
+
+        // Fetch Table
+        val table = getTable(database)
+
+        // Delete Data
+        val deleteCount = table.deleteRecords(conditionList)
+
+        // Save Table
+        table.save()
+
+        // Return Result
+        return KraQLQueryResult(table, "Deleted $deleteCount records!", deleteCount)
+        // NOTE: records should not be pluralised if deleteCount == 1
+    }
+
+    override fun toMap(): HashMap<String, Any> {
+        return hashMapOf()
+    }
+    // NOTE: this isn't correct - where is it being called?
+
+}
+
 class KraQLQueryInsert(tableName: String, private val fieldList: ArrayList<String>, private val recordList: ArrayList<String>): KraQLQuery(tableName) {
 
     override fun invoke(database: KraQLDatabase): KraQLQueryResult {
@@ -131,6 +156,9 @@ class KraQLQueryUpdate(tableName: String, private val updateList: List<KraQLQuer
 
         // Update Data
         val updateCount = table.update(updateList, conditionList)
+
+        // Save Table
+        table.save()
 
         // Return Result
         return KraQLQueryResult(table, "Updated $updateCount records!", updateCount)

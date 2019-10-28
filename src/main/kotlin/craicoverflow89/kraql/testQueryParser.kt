@@ -2,15 +2,18 @@ package craicoverflow89.kraql
 
 fun main() {
 
-    testInsert()
+    //testInsert()
     // NOTE: encountering an NPE here due to inverted comma issues in the parser
 
     //testSelect()
     //testUpdate()
-    //testDelete()
+    testDeleteFrom()
+    //testDeleteTable()
+
+    // NOTE: need to check all of these different operations based on account permissions
 }
 
-fun testDelete() {
+fun testDeleteFrom() {
 
     // Load Database
     val db = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/test.kqld")
@@ -32,6 +35,29 @@ fun testDelete() {
         SELECT *
         FROM test
     """).getData())
+}
+
+fun testDeleteTable() {
+
+    // Load Database
+    val db = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/test.kqld")
+
+    // Debug Tables
+    // NOTE: need to make it easy to select list of tables via query
+
+    // Test Query
+    db.query("""
+        DELETE test
+    """)
+
+    // NOTE: need to check permissions here
+
+    // Debug Data
+    println(db.query("""
+        SELECT *
+        FROM test
+    """).getData())
+    // NOTE: expecting this to throw
 }
 
 fun testInsert() {

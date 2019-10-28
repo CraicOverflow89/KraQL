@@ -10,12 +10,20 @@ grammar KraQLQuery;
 // Parser Rules
 query returns [KraQLQuery result]
     :   (
+            queryDeleteFrom {$result = $queryDeleteFrom.result;}
+        |
             queryInsert {$result = $queryInsert.result;}
         |
             querySelect {$result = $querySelect.result;}
         |
             queryUpdate {$result = $queryUpdate.result;}
         ) EOF
+    ;
+
+queryDeleteFrom returns [KraQLQueryDeleteFrom result]
+    :   'DELETE FROM' tableName = string
+        clauseWhere
+        {$result = new KraQLQueryDeleteFrom($tableName.text, $clauseWhere.result);}
     ;
 
 queryInsert returns [KraQLQueryInsert result]
