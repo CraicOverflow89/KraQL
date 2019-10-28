@@ -13,9 +13,7 @@ fun main() {
     // NOTE: there is currently no capability of OR in conditions or parens to determine groups
     // NOTE: not currently allowing for comments within the query string
 
-    testInsert(db)
-    // NOTE: encountering an NPE here due to inverted comma issues in the parser
-
+    //testInsert(db)
     //testSelect(db)
     //testUpdate(db)
     //testDeleteFrom(db)

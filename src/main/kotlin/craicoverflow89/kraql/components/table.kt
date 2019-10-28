@@ -121,6 +121,12 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
         // NOTE: need to reduce recordList to new list having applied the Order By sorting
     }
 
+    fun getField(fieldName: String): KraQLTableField {
+        return fieldList.first {
+            it.name == fieldName
+        }
+    }
+
     fun getFields(): ArrayList<KraQLTableField> {
         return fieldList
     }
