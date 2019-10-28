@@ -6,7 +6,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class KraQLTable(val database: KraQLDatabase, val name: String, private val fieldList: ArrayList<KraQLTableField> = arrayListOf(), private val recordList: ArrayList<KraQLTableRecord> = arrayListOf()) {
+class KraQLTable(val database: KraQLDatabase, val name: String, private val fieldList: ArrayList<KraQLTableField> = arrayListOf(), private val recordList: ArrayList<KraQLTableRecord> = arrayListOf(), private val indexList: ArrayList<KraQLTableIndex> = arrayListOf()) {
 
     var idCount = -1
     // NOTE: need to restore this from file, when loading instead of creating
@@ -104,6 +104,8 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
         // Default Fields
         if(fieldList.isEmpty()) fieldList.addAll(getFields())
 
+        // NOTE: if selecting by a field that has an index, it will be much quicker to use that
+
         // Map Conditions
         val conditions = conditionList.map {
             it.second
@@ -129,6 +131,14 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
                 it.name == fieldName
             } ?: throw KraQLTableFieldNotFoundException(name, fieldName))
         }
+    }
+
+    fun getIndexes() = indexList
+
+    fun hasIndex(field: KraQLTableField) = hasIndex(field.name)
+
+    fun hasIndex(field: String) = indexList.any {
+        it.field.name == field
     }
 
     private fun idGenerate(): Int {
@@ -250,6 +260,16 @@ enum class KraQLTableFieldType {
 }
 
 class KraQLTableFieldTypeParseException(value: String): Exception("Failed to parse field type from value $value!")
+
+class KraQLTableIndex(val table: KraQLTable, val field: KraQLTableField) {
+
+    fun toFile() = ""
+    // NOTE: come back to this
+
+    override fun toString() = "{table: ${table.name}, field: ${field.name}}"
+
+}
+
 class KraQLTableInsertFieldException(field: String): Exception("Must supply data for the $field field!")
 class KraQLTableInsertTypeException(field: String, type: KraQLTableFieldType): Exception("Must supply data of type $type for the $field field!")
 class KraQLTableNotFoundException(name: String): Exception("Could not find a table named $name!")
