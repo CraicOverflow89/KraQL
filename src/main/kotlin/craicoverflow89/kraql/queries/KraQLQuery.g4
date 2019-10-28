@@ -10,6 +10,8 @@ grammar KraQLQuery;
 // Parser Rules
 query returns [KraQLQuery result]
     :   (
+            queryCreateTable {$result = $queryCreateTable.result;}
+        |
             queryDeleteFrom {$result = $queryDeleteFrom.result;}
         |
             queryDeleteTable {$result = $queryDeleteTable.result;}
@@ -20,6 +22,27 @@ query returns [KraQLQuery result]
         |
             queryUpdate {$result = $queryUpdate.result;}
         ) EOF
+    ;
+
+queryCreateTable returns [KraQLQueryCreateTable result]
+    :   'CREATE TABLE' tableName = string
+        PAREN1 queryCreateTableFields PAREN2
+        {$result = new KraQLQueryCreateTable($tableName.text, $queryCreateTableFields.result);}
+    ;
+
+queryCreateTableFields returns [ArrayList<KraQLQueryCreateTableField> result]
+    @init {ArrayList<KraQLQueryCreateTableField> fields = new ArrayList();}
+    :   field1 = queryCreateTableField {fields.add($field1.result);}
+        (
+            COMMA field2 = queryCreateTableField {fields.add($field2.result);}
+        )*
+        {$result = fields;}
+    ;
+
+queryCreateTableField returns [KraQLQueryCreateTableField result]
+    :   name = string
+        type = string
+        {$result = new KraQLQueryCreateTableField($name.text, $type.text);}
     ;
 
 queryDeleteFrom returns [KraQLQueryDeleteFrom result]

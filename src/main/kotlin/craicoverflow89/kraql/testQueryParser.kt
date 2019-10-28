@@ -20,9 +20,21 @@ fun main() {
     //testUpdate(db)
     //testDeleteFrom(db)
     //testDeleteTable(db)
+    testCreateTable(db)
 
     // NOTE: need to check all of these different operations without WHERE clauses
     // NOTE: need to check all of these different operations based on account permissions
+}
+
+fun testCreateTable(db: KraQLDatabase) {
+
+    // Test Query
+    println(db.query("""
+        CREATE TABLE test2 (
+            name STRING,
+            age INT
+        )
+    """))
 }
 
 fun testDeleteFrom(db: KraQLDatabase) {

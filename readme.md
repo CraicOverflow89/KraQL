@@ -7,8 +7,8 @@ Lightweight data storage library.
 
 ### Tasks
 
- - implement exceptions for reserved words 
- - database loader
+ - implement exceptions for reserved words
+ - query execution time
  - params for all queries to be passed separately to query string
  - shell interface
  - docs

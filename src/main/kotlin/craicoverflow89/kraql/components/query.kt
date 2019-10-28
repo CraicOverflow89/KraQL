@@ -38,6 +38,30 @@ class KraQLQueryConditionLike(field: String, private val value: String): KraQLQu
 
 }
 
+class KraQLQueryCreateTable(tableName: String, private val fieldList: List<KraQLQueryCreateTableField>): KraQLQuery(tableName) {
+
+    override fun invoke(database: KraQLDatabase): KraQLQueryResult {
+
+        // TEMP TABLE
+        val table = null
+
+        // TEMP RETURN
+        return KraQLQueryResult(database, table, "Created the $tableName table!", 1)
+    }
+
+    override fun toMap(): HashMap<String, Any> {
+        return hashMapOf()
+    }
+    // NOTE: this isn't correct - where is it being called?
+
+}
+
+class KraQLQueryCreateTableField(private val name: String, private val type: String) {
+
+    override fun toString() = "{name: $name, type: $type}"
+
+}
+
 class KraQLQueryDeleteFrom(tableName: String, private val conditionList: List<KraQLQueryCondition>): KraQLQuery(tableName) {
 
     override fun invoke(database: KraQLDatabase): KraQLQueryResult {
