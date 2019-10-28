@@ -49,7 +49,7 @@ fun testDeleteFrom(db: KraQLDatabase) {
 fun testDeleteTable(db: KraQLDatabase) {
 
     // Debug Tables
-    // NOTE: need to make it easy to select list of tables via query
+    println(db.getTables())
 
     // Test Query
     db.query("""
@@ -58,12 +58,8 @@ fun testDeleteTable(db: KraQLDatabase) {
 
     // NOTE: need to check permissions here
 
-    // Debug Data
-    println(db.query("""
-        SELECT *
-        FROM test
-    """).getData())
-    // NOTE: expecting this to throw
+    // Debug Tables
+    println(db.getTables())
 }
 
 fun testInsert(db: KraQLDatabase) {

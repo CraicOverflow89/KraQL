@@ -52,8 +52,26 @@ class KraQLQueryDeleteFrom(tableName: String, private val conditionList: List<Kr
         table.save()
 
         // Return Result
-        return KraQLQueryResult(table, "Deleted $deleteCount records!", deleteCount)
+        return KraQLQueryResult(database, table, "Deleted $deleteCount records!", deleteCount)
         // NOTE: records should not be pluralised if deleteCount == 1
+    }
+
+    override fun toMap(): HashMap<String, Any> {
+        return hashMapOf()
+    }
+    // NOTE: this isn't correct - where is it being called?
+
+}
+
+class KraQLQueryDeleteTable(tableName: String): KraQLQuery(tableName) {
+
+    override fun invoke(database: KraQLDatabase): KraQLQueryResult {
+
+        // Delete Table
+        database.deleteTable(tableName)
+
+        // Return Result
+        return KraQLQueryResult(database, null, "Deleted $tableName table!", 1)
     }
 
     override fun toMap(): HashMap<String, Any> {
@@ -77,7 +95,7 @@ class KraQLQueryInsert(tableName: String, private val fieldList: ArrayList<Strin
         table.save()
 
         // TEMP RETURN
-        return KraQLQueryResult(table, "Inserted 1 record!", 1)
+        return KraQLQueryResult(database, table, "Inserted 1 record!", 1)
         // NOTE: come back to this when multiple records can be inserted at once
     }
 
@@ -110,12 +128,12 @@ enum class KraQLQueryOrderDirection {
     ASCENDING, DESCENDING
 }
 
-class KraQLQueryResult(private val table: KraQLTable, private val description: String, private val count: Int, private val data: KraQLResult? = null) {
+class KraQLQueryResult(private val database: KraQLDatabase, private val table: KraQLTable?, private val description: String, private val count: Int, private val data: KraQLResult? = null) {
     // NOTE: come back to property visibility later on
 
     fun getData() = data
 
-    override fun toString() = "{database: ${table.database.name}, table: ${table.name}, description: $description, count: $count, data: $data}"
+    override fun toString() = "{database: ${database.name}, table: ${table?.name}, description: $description, count: $count, data: $data}"
 
 }
 
@@ -136,7 +154,7 @@ class KraQLQuerySelect(tableName: String, private val fieldList: ArrayList<Strin
         val data = table.get(fields, conditions, orderList)
 
         // Return Result
-        return KraQLQueryResult(table, "Selected ${data.getRecordCount()} records!", data.getRecordCount(), data)
+        return KraQLQueryResult(database, table, "Selected ${data.getRecordCount()} records!", data.getRecordCount(), data)
         // NOTE: records should not be pluralised if result.data.size == 1
     }
 
@@ -161,7 +179,7 @@ class KraQLQueryUpdate(tableName: String, private val updateList: List<KraQLQuer
         table.save()
 
         // Return Result
-        return KraQLQueryResult(table, "Updated $updateCount records!", updateCount)
+        return KraQLQueryResult(database, table, "Updated $updateCount records!", updateCount)
         // NOTE: records should not be pluralised if updateCount == 1
     }
 

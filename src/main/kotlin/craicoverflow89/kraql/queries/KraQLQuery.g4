@@ -12,6 +12,8 @@ query returns [KraQLQuery result]
     :   (
             queryDeleteFrom {$result = $queryDeleteFrom.result;}
         |
+            queryDeleteTable {$result = $queryDeleteTable.result;}
+        |
             queryInsert {$result = $queryInsert.result;}
         |
             querySelect {$result = $querySelect.result;}
@@ -24,6 +26,11 @@ queryDeleteFrom returns [KraQLQueryDeleteFrom result]
     :   'DELETE FROM' tableName = string
         clauseWhere
         {$result = new KraQLQueryDeleteFrom($tableName.text, $clauseWhere.result);}
+    ;
+
+queryDeleteTable returns [KraQLQueryDeleteTable result]
+    :   'DELETE TABLE' tableName = string
+        {$result = new KraQLQueryDeleteTable($tableName.text);}
     ;
 
 queryInsert returns [KraQLQueryInsert result]

@@ -52,6 +52,20 @@ class KraQLDatabase(val name: String, private val tableList: ArrayList<KraQLTabl
         return table
     }
 
+    fun deleteTable(tableName: String) {
+
+        // Find Table
+        val table = tableList.firstOrNull {
+            it.name == tableName
+        } ?: throw KraQLTableNotFoundException(tableName)
+
+        // Delete Table
+        tableList.remove(table)
+
+        // Save Database
+        save()
+    }
+
     fun getDebugSaveIgnore() = debugSaveIgnore
 
     fun getTable(name: String): KraQLTable {
@@ -68,6 +82,8 @@ class KraQLDatabase(val name: String, private val tableList: ArrayList<KraQLTabl
         // Return Table
         return table
     }
+
+    fun getTables() = tableList
 
     fun query(value: String): KraQLQueryResult {
 
