@@ -1,5 +1,6 @@
 package craicoverflow89.kraql
 
+import craicoverflow89.kraql.components.KraQLTableInsertFieldException
 import org.junit.Assert
 import org.junit.Test
 
@@ -36,6 +37,21 @@ class KraQLQueryInsertIntoTest {
         """)
     }
     // NOTE: need to handle custom exceptions for type parsing issues
+
+    @Test(expected = KraQLTableInsertFieldException::class)
+    fun missingField() {
+
+        // Load Database
+        val db = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/test.kqld").apply {
+            setDebugSaveIgnore(true)
+        }
+
+        // Insert Record
+        db.query("""
+            INSERT INTO test (name)
+            VALUES ('Jacob')
+        """)
+    }
 
     @Test
     fun valid() {
