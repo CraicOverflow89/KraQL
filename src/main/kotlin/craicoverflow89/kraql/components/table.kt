@@ -82,6 +82,13 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
 
     fun deleteRecords(conditionList: List<KraQLQueryCondition>): Int {
 
+        // Invalid Conditions
+        conditionList.forEach {update ->
+            if(fieldList.firstOrNull {
+                it.name == update.field
+            } == null) throw KraQLTableFieldNotFoundException(this.name, update.field)
+        }
+
         // Create Result
         val records = recordList.filter {record ->
             !conditionList.all {condition ->
@@ -186,8 +193,15 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
 
     fun update(updateList: List<KraQLQueryUpdatePair>, conditionList: List<KraQLQueryCondition>): Int {
 
-        // Invalid Fields
+        // Invalid Update
         updateList.forEach {update ->
+            if(fieldList.firstOrNull {
+                it.name == update.field
+            } == null) throw KraQLTableFieldNotFoundException(this.name, update.field)
+        }
+
+        // Invalid Conditions
+        conditionList.forEach {update ->
             if(fieldList.firstOrNull {
                 it.name == update.field
             } == null) throw KraQLTableFieldNotFoundException(this.name, update.field)

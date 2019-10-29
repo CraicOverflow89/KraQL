@@ -5,7 +5,7 @@ import craicoverflow89.kraql.components.KraQLTableNotFoundException
 import org.junit.Assert
 import org.junit.Test
 
-class KraQLQueryUpdateTest {
+class KraQLQueryDeleteFromTest {
 
     @Test(expected = KraQLTableFieldNotFoundException::class)
     fun invalidField() {
@@ -15,12 +15,13 @@ class KraQLQueryUpdateTest {
             setDebugSaveIgnore(true)
         }
 
-        // Update Records
+        // Delete Records
         db.query("""
-            UPDATE test
-            SET name2 = 'Jacob'
+            DELETE FROM test
+            WHERE name2 = 'Jacob'
         """)
     }
+    // NOTE: this is currently throwing an NPE
 
     @Test(expected = IllegalArgumentException::class)
     fun invalidSyntax() {
@@ -30,10 +31,10 @@ class KraQLQueryUpdateTest {
             setDebugSaveIgnore(true)
         }
 
-        // Update Records
+        // Delete Records
         db.query("""
-            UPDATE test
-            SET name = 'Jacob'
+            DELETE FROM test
+            WHERE name = 'Jacob'
             ORDER BY name
         """)
     }
@@ -47,10 +48,10 @@ class KraQLQueryUpdateTest {
             setDebugSaveIgnore(true)
         }
 
-        // Update Records
+        // Delete Records
         db.query("""
-            UPDATE test2
-            SET name = 'Jacob'
+            DELETE FROM test2
+            WHERE name = 'Jacob'
         """)
     }
 
@@ -62,19 +63,18 @@ class KraQLQueryUpdateTest {
             setDebugSaveIgnore(true)
         }
 
-        // Update Records
+        // Delete Records
         db.query("""
-            UPDATE test
-            SET name = 'JoshNew'
-            WHERE name = 'Josh'
+            DELETE FROM test
+            WHERE name LIKE 'Josh%'
         """)
 
         // Record Updated
-        Assert.assertEquals("JoshNew", db.query("""
+        Assert.assertEquals(0, db.query("""
             SELECT name
             FROM test
             WHERE name LIKE 'Josh%'
-        """).getData()!!.getRecords()[0].data["name"])
+        """).getData()!!.getRecordCount())
     }
 
 }
