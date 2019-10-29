@@ -55,6 +55,7 @@ class KraQLQueryCreateTable(tableName: String, private val fieldList: List<KraQL
 
         // Save Database
         database.save()
+        // NOTE: should this not be called by database?
 
         // Return Result
         return KraQLQueryResult(database, table, "Created the $tableName table!", 1)
@@ -85,6 +86,7 @@ class KraQLQueryDeleteFrom(tableName: String, private val conditionList: List<Kr
 
         // Save Table
         table.save()
+        // NOTE: should this not be called by table?
 
         // Return Result
         return KraQLQueryResult(database, table, "Deleted $deleteCount records!", deleteCount)
@@ -128,6 +130,7 @@ class KraQLQueryInsert(tableName: String, private val fieldList: ArrayList<Strin
 
         // Save Table
         table.save()
+        // NOTE: should this not be called by table?
 
         // TEMP RETURN
         return KraQLQueryResult(database, table, "Inserted 1 record!", 1)
@@ -212,6 +215,7 @@ class KraQLQueryUpdate(tableName: String, private val updateList: List<KraQLQuer
 
         // Save Table
         table.save()
+        // NOTE: should this not be called by table?
 
         // Return Result
         return KraQLQueryResult(database, table, "Updated $updateCount records!", updateCount)

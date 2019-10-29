@@ -186,6 +186,13 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
 
     fun update(updateList: List<KraQLQueryUpdatePair>, conditionList: List<KraQLQueryCondition>): Int {
 
+        // Invalid Fields
+        updateList.forEach {update ->
+            if(fieldList.firstOrNull {
+                it.name == update.field
+            } == null) throw KraQLTableFieldNotFoundException(this.name, update.field)
+        }
+
         // Create Result
         var updateCount = 0
         val records = ArrayList<KraQLTableRecord>().apply {
