@@ -1,5 +1,6 @@
 package craicoverflow89.kraql
 
+import java.awt.BorderLayout
 import java.awt.event.KeyEvent
 import javax.swing.*
 import kotlin.system.exitProcess
@@ -46,12 +47,18 @@ class KraQLStudio: JFrame() {
             })
         }
 
+        // Create Explorer
+        contentPane.add(JLabel("Object Explorer"), BorderLayout.LINE_START)
+
         // Create Content
-        add(JPanel().apply {
+        contentPane.add(JPanel().apply {
 
             // TEMP LABEL
-            add(JLabel("Content goes here"))
-        })
+            add(JLabel("Content View"))
+        }, BorderLayout.CENTER)
+
+        // Create Status
+        contentPane.add(JLabel("Status Bar"), BorderLayout.PAGE_END)
 
         // Frame Visible
         setVisible(true)
