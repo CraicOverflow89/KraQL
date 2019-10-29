@@ -10,7 +10,7 @@ Lightweight data storage library.
  - implement exceptions for reserved words
  - query execution time
  - params for all queries to be passed separately to query string
- - shell interface
+ - tests for database operations (eg: create, account stuff, table stuff, etc...)
  - docs
 
 ### Issues
@@ -18,7 +18,7 @@ Lightweight data storage library.
  - the timestamp parser is just returning `Date()` for now
  - there are no default values for fields
  - there are no constraints for fields
- - there are no indexes
+ - indexes have yet be used (wait until objects are in separate files)
  - the current table record parser does not handle escaped pipes
  - some result descriptions are saying `x` instead of count
  - how to handle select/update/delete where id (rather than fields) match condition?
