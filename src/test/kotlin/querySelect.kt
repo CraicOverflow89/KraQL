@@ -184,7 +184,9 @@ class KraQLQuerySelectTest {
         """)
 
         // Name Values
-        Assert.assertEquals("James", result.getData()!!.getRecords()[0].data["name"])
+        result.getData()!!.getRecords().let {
+            Assert.assertEquals("James", it[0].data["name"])
+        }
 
         // Select Count
         Assert.assertEquals(1, result.getCount())
@@ -206,8 +208,10 @@ class KraQLQuerySelectTest {
         """)
 
         // Name Values
-        Assert.assertEquals("James", result.getData()!!.getRecords()[0].data["name"])
-        Assert.assertEquals("Josh", result.getData()!!.getRecords()[1].data["name"])
+        result.getData()!!.getRecords().let {
+            Assert.assertEquals("James", it[0].data["name"])
+            Assert.assertEquals("Josh", it[1].data["name"])
+        }
 
         // Select Count
         Assert.assertEquals(2, result.getCount())
