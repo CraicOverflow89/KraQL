@@ -72,7 +72,7 @@ class KraQLQueryCreateTableTest {
         val tableCount = db.getTables().size
 
         // Create Table
-        db.query("""
+        val result = db.query("""
             CREATE TABLE test2 (
                 name = STRING,
                 age = INTEGER
@@ -90,6 +90,9 @@ class KraQLQueryCreateTableTest {
         // Age Field
         Assert.assertTrue(newTable.getFields(listOf("age")).size == 1)
         Assert.assertTrue(newTable.getField("age").type == KraQLTableFieldType.INTEGER)
+
+        // Create Count
+        Assert.assertEquals(1, result.getCount())
     }
 
 }

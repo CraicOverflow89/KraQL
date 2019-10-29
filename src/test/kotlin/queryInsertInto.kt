@@ -66,7 +66,7 @@ class KraQLQueryInsertIntoTest {
         val recordCount = table.get().getRecordCount()
 
         // Insert Record
-        db.query("""
+        val result = db.query("""
             INSERT INTO test (name, dob)
             VALUES ('Jacob', '2019-10-19 08.32.00.000')
         """)
@@ -82,7 +82,10 @@ class KraQLQueryInsertIntoTest {
 
         // DOB Value
         //Assert.assertEquals("", record.data["dob"]!!.toString())
-        // NOTE: update this when there is a fixed value for DOB default dats
+        // NOTE: update this when there is a fixed value for DOB default dates
+
+        // Insert Count
+        Assert.assertEquals(1, result.getCount())
     }
 
 }

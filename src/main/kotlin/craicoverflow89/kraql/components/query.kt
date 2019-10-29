@@ -169,6 +169,8 @@ enum class KraQLQueryOrderDirection {
 class KraQLQueryResult(private val database: KraQLDatabase, private val table: KraQLTable?, private val description: String, private val count: Int, private val data: KraQLResult? = null) {
     // NOTE: come back to property visibility later on
 
+    fun getCount() = count
+
     fun getData() = data
 
     override fun toString() = "{database: ${database.name}, table: ${table?.name}, description: $description, count: $count, data: $data}"

@@ -63,7 +63,7 @@ class KraQLQueryUpdateTest {
         }
 
         // Update Records
-        db.query("""
+        val result = db.query("""
             UPDATE test
             SET name = 'JoshNew'
             WHERE name = 'Josh'
@@ -75,6 +75,9 @@ class KraQLQueryUpdateTest {
             FROM test
             WHERE name LIKE 'Josh%'
         """).getData()!!.getRecords()[0].data["name"])
+
+        // Delete Count
+        Assert.assertEquals(1, result.getCount())
     }
 
 }

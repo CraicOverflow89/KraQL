@@ -21,7 +21,6 @@ class KraQLQueryDeleteFromTest {
             WHERE name2 = 'Jacob'
         """)
     }
-    // NOTE: this is currently throwing an NPE
 
     @Test(expected = IllegalArgumentException::class)
     fun invalidSyntax() {
@@ -64,7 +63,7 @@ class KraQLQueryDeleteFromTest {
         }
 
         // Delete Records
-        db.query("""
+        val result = db.query("""
             DELETE FROM test
             WHERE name LIKE 'Josh%'
         """)
@@ -75,6 +74,9 @@ class KraQLQueryDeleteFromTest {
             FROM test
             WHERE name LIKE 'Josh%'
         """).getData()!!.getRecordCount())
+
+        // Delete Count
+        Assert.assertEquals(1, result.getCount())
     }
 
 }
