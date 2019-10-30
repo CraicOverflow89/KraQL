@@ -148,30 +148,42 @@ class KraQLApplication {
             File(archiveDir).mkdir()
 
             // Write Accounts
-            File("$archiveDir/accounts").mkdir()
-            database.getAccounts().forEach {
+            with("$archiveDir/accounts") {
 
-                // Write Data
-                File("$archiveDir/accounts/${it.name}.kqld").writeText(it.toFile())
+                // Create Directory
+                File(this).mkdir()
+
+                // Write Files
+                database.getAccounts().forEach {
+
+                    // Write Data
+                    File("$this/${it.name}.kqld").writeText(it.toFile())
+                }
             }
 
             // Write Tables
-            File("$archiveDir/tables").mkdir()
-            database.getTables().forEach {table ->
+            with("$archiveDir/tables") {
 
                 // Create Directory
-                File("$archiveDir/tables/${table.name}").mkdir()
+                File(this).mkdir()
 
-                // Create Data
-                File("$archiveDir/tables/${table.name}/data").mkdir()
-                table.getRecords().forEach {record ->
-                    File("$archiveDir/tables/${table.name}/data/${record.id}.kqld").writeText(record.toFile())
-                }
+                // Write Files
+                database.getTables().forEach {table ->
 
-                // Create Indexes
-                File("$archiveDir/tables/${table.name}/indexes").mkdir()
-                table.getIndexes().forEach {index ->
-                    File("$archiveDir/tables/${table.name}/indexes/${index.getName()}.kqld").writeText(index.toFile())
+                    // Create Directory
+                    File("$this/${table.name}").mkdir()
+
+                    // Create Data
+                    File("$this/${table.name}/data").mkdir()
+                    table.getRecords().forEach {record ->
+                        File("$this/${table.name}/data/${record.id}.kqld").writeText(record.toFile())
+                    }
+
+                    // Create Indexes
+                    File("$this/${table.name}/indexes").mkdir()
+                    table.getIndexes().forEach {index ->
+                        File("$this/${table.name}/indexes/${index.getName()}.kqld").writeText(index.toFile())
+                    }
                 }
             }
         }
