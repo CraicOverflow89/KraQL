@@ -35,6 +35,8 @@ class KraQLAccount(val database: KraQLDatabase, val name: String, val password: 
 
 }
 
+class KraQLAccountNotFoundException(name: String): Exception("Could not find an account named $name!")
+
 enum class KraQLAccountPermission {
     DATABASE_CREATE, DATABASE_DELETE, TABLE_CREATE, TABLE_DELETE;
     // NOTE: the nature of the system has suggested that it's more useful to ignore DATABASE stuff

@@ -8,7 +8,7 @@ import org.antlr.v4.runtime.ANTLRInputStream
 import org.antlr.v4.runtime.CommonTokenStream
 import java.io.File
 
-class KraQLDatabase(val name: String, private val tableList: ArrayList<KraQLTable> = arrayListOf()) {
+class KraQLDatabase(val name: String, private val accountList: ArrayList<KraQLAccount> = arrayListOf(), private val tableList: ArrayList<KraQLTable> = arrayListOf()) {
 
     // Debug: IGNORE SAVES
     private var debugSaveIgnore = false
@@ -19,7 +19,13 @@ class KraQLDatabase(val name: String, private val tableList: ArrayList<KraQLTabl
         if(KraQLApplication.isReserved(name)) throw KraQLReservedCreateException(name)
 
         // Create Account
-        return KraQLAccount(this, name, password, permissions ?: hashMapOf())
+        val account = KraQLAccount(this, name, password, permissions ?: hashMapOf())
+
+        // Add Account
+        accountList.add(account)
+
+        // Return Account
+        return account
     }
 
     fun addTable(name: String): KraQLTable {
@@ -66,22 +72,15 @@ class KraQLDatabase(val name: String, private val tableList: ArrayList<KraQLTabl
         save()
     }
 
+    fun getAccount(name: String) = accountList.firstOrNull {
+        it.name == name
+    } ?: throw KraQLAccountNotFoundException(name)
+
     fun getDebugSaveIgnore() = debugSaveIgnore
 
-    fun getTable(name: String): KraQLTable {
-        // NOTE: this could all be condensed
-
-        // Search Table
-        val table = tableList.firstOrNull {
-            it.name == name
-        }
-
-        // Not Found
-        if(table == null) throw KraQLTableNotFoundException(name)
-
-        // Return Table
-        return table
-    }
+    fun getTable(name: String) = tableList.firstOrNull {
+        it.name == name
+    } ?: throw KraQLTableNotFoundException(name)
 
     fun getTables() = tableList
 
