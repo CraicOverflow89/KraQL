@@ -148,6 +148,8 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
 
     fun getIndexes() = indexList
 
+    fun getRecords() = recordList
+
     fun hasIndex(field: KraQLTableField) = hasIndex(field.name)
 
     fun hasIndex(field: String) = indexList.any {
@@ -172,22 +174,9 @@ class KraQLTable(val database: KraQLDatabase, val name: String, private val fiel
     }
 
     fun toFile() = ArrayList<String>().apply {
-
-        // Table Data
-        add("$name:${fieldList.size}:${recordList.size}")
-
-        // Field Data
-        fieldList.forEach {
-            add(it.toFile())
-        }
-
-        // Record Data
-        recordList.forEach {record ->
-            add(fieldList.map {
-                record.toFile(it)
-            }.joinToString("|"))
-        }
-    }
+        add("# KraQLTable")
+        add(name)
+    }.joinToString("\n")
 
     override fun toString() = "{name: $name, database: ${database.name}, fields: ${if(fieldList.isEmpty()) "none" else "[" + fieldList.joinToString {"{name:${it.name}, type:${it.type}}"} + "]"}}"
 
@@ -290,6 +279,10 @@ class KraQLTableFieldTypeParseException(value: String): Exception("Failed to par
 
 class KraQLTableIndex(val table: KraQLTable, val field: KraQLTableField) {
 
+    private val name = "index_${table.name}_${field.name}"
+
+    fun getName() = name
+
     fun toFile() = ""
     // NOTE: come back to this
 
@@ -303,7 +296,8 @@ class KraQLTableNotFoundException(name: String): Exception("Could not find a tab
 
 class KraQLTableRecord(val id: Int, val data: HashMap<String, Any>) {
 
-    fun toFile(field: KraQLTableField) = data[field.name]!!.toString().replace("|", "\\|")
+    //fun toFile(field: KraQLTableField) = data[field.name]!!.toString().replace("|", "\\|")
+    fun toFile() = "TEMP"
 
     override fun toString() = "{id: $id, data: {${data.map {
         it.toString()

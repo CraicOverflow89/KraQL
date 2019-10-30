@@ -139,31 +139,41 @@ class KraQLApplication {
 
             // Validate Directory
             //if(!File(directory).exists()) throw
-            // NOTE: if directory doesn't exist, should we recursively create it?
-
-            // File Path
-            //val path = directory + "/" + database.name + ".kqld"
+            // NOTE: throw if directory doesn't exist?
 
             // Archive Directory
-            val archiveDir = directory + "/" + database.name
+            val archiveDir = directory + (if(directory.endsWith("/")) "" else "/") + database.name
 
-            // NOTE: need to handle overwrite of existing
-            // NOTE: might want a new class that builds a tree of dirs and files with ability to zip
-
-            // Create Directory
+            // Write Archive
             File(archiveDir).mkdir()
 
-            // Write Data
-            /*File(path).writeText(ArrayList<String>().apply {
+            // Write Accounts
+            File("$archiveDir/accounts").mkdir()
+            database.getAccounts().forEach {
 
-                // Application Data
-                add("# KraQL Database")
-                add("# Version ${getVersion()}")
+                // Write Data
+                File("$archiveDir/accounts/${it.name}.kqld").writeText(it.toFile())
+            }
 
-                // Database Data
-                addAll(database.toFile())
+            // Write Tables
+            File("$archiveDir/tables").mkdir()
+            database.getTables().forEach {table ->
 
-            }.joinToString("\n"))*/
+                // Create Directory
+                File("$archiveDir/tables/${table.name}").mkdir()
+
+                // Create Data
+                File("$archiveDir/tables/${table.name}/data").mkdir()
+                table.getRecords().forEach {record ->
+                    File("$archiveDir/tables/${table.name}/data/${record.id}.kqld").writeText(record.toFile())
+                }
+
+                // Create Indexes
+                File("$archiveDir/tables/${table.name}/indexes").mkdir()
+                table.getIndexes().forEach {index ->
+                    File("$archiveDir/tables/${table.name}/indexes/${index.getName()}.kqld").writeText(index.toFile())
+                }
+            }
         }
 
     }

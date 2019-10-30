@@ -23,8 +23,12 @@ class KraQLAccount(val database: KraQLDatabase, val name: String, val password: 
         permissions[permission] = value
     }
 
-    fun toFile() = ""
-    // NOTE: come back to this
+    fun toFile() = ArrayList<String>().apply {
+        add("# KraQLAccount")
+        add(name)
+        add(password)
+        add(permissionsToString())
+    }.joinToString("\n")
 
     override fun toString() = "{name: $name, database: ${database.name}, permissions:${permissionsToString()}}"
 

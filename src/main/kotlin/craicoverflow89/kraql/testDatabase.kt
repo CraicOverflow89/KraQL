@@ -9,6 +9,7 @@ fun main() {
 
     //testLoad()
     //testSave()
+    testSaveNew()
 
 }
 
@@ -81,4 +82,15 @@ fun testSave() {
     // Debug Data
     println(db2.getTable("test").get())
 
+}
+
+fun testSaveNew() {
+
+    // Load Database
+    val db = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/test.kqld").apply {
+        addAccount("James", "password")
+    }
+
+    // Save Database
+    db.save()
 }

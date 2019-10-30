@@ -76,6 +76,8 @@ class KraQLDatabase(val name: String, private val accountList: ArrayList<KraQLAc
         it.name == name
     } ?: throw KraQLAccountNotFoundException(name)
 
+    fun getAccounts() = accountList
+
     fun getDebugSaveIgnore() = debugSaveIgnore
 
     fun getTable(name: String) = tableList.firstOrNull {
@@ -116,9 +118,9 @@ class KraQLDatabase(val name: String, private val accountList: ArrayList<KraQLAc
         // NOTE: might want to add other settings to the above
 
         // Table Data
-        tableList.forEach {
+        /*tableList.forEach {
             addAll(it.toFile())
-        }
+        }*/
     }
 
     override fun toString() = "{name: $name, tables: ${if(tableList.isEmpty()) "none" else "[" + tableList.joinToString {it.name} + "]"}}"
