@@ -4,6 +4,7 @@ import craicoverflow89.kraql.portal.KraQLPortal
 
 fun main() {
 
-    KraQLPortal()
+    val portal = KraQLPortal()
+    println(portal.getVersion())
 
 }

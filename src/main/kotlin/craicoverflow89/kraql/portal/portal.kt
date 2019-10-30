@@ -9,7 +9,7 @@ import kotlin.system.exitProcess
 class KraQLPortal: JFrame() {
 
     private val dialogAbout = KraQLPortalDialogAbout(this)
-    private val version = KraQLApplication.resourceLoad("portal/version").readText()
+    private var version: String? = null
 
     init {
 
@@ -68,6 +68,13 @@ class KraQLPortal: JFrame() {
         setVisible(true)
     }
 
-    fun getVersion() = version
+    fun getVersion(): String {
+
+        // Load Version
+        if(version == null) version = KraQLApplication.resourceLoad("portal/version").readText()
+
+        // Return Version
+        return version!!
+    }
 
 }
