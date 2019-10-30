@@ -142,10 +142,19 @@ class KraQLApplication {
             // NOTE: if directory doesn't exist, should we recursively create it?
 
             // File Path
-            val path = directory + "/" + database.name + ".kqld"
+            //val path = directory + "/" + database.name + ".kqld"
+
+            // Archive Directory
+            val archiveDir = directory + "/" + database.name
+
+            // NOTE: need to handle overwrite of existing
+            // NOTE: might want a new class that builds a tree of dirs and files with ability to zip
+
+            // Create Directory
+            File(archiveDir).mkdir()
 
             // Write Data
-            File(path).writeText(ArrayList<String>().apply {
+            /*File(path).writeText(ArrayList<String>().apply {
 
                 // Application Data
                 add("# KraQL Database")
@@ -154,7 +163,7 @@ class KraQLApplication {
                 // Database Data
                 addAll(database.toFile())
 
-            }.joinToString("\n"))
+            }.joinToString("\n"))*/
         }
 
     }
