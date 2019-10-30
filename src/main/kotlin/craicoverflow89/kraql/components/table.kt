@@ -283,8 +283,10 @@ class KraQLTableIndex(val table: KraQLTable, val field: KraQLTableField) {
 
     fun getName() = name
 
-    fun toFile() = ""
-    // NOTE: come back to this
+    fun toFile() = ArrayList<String>().apply {
+        add("# KraQLTableIndex")
+        add(field.name)
+    }
 
     override fun toString() = "{table: ${table.name}, field: ${field.name}}"
 
@@ -296,8 +298,11 @@ class KraQLTableNotFoundException(name: String): Exception("Could not find a tab
 
 class KraQLTableRecord(val id: Int, val data: HashMap<String, Any>) {
 
-    //fun toFile(field: KraQLTableField) = data[field.name]!!.toString().replace("|", "\\|")
-    fun toFile() = "TEMP"
+    fun toFile() = ArrayList<String>().apply {
+        data.forEach {k, v ->
+            add("$k:$v")
+        }
+    }.joinToString("\n")
 
     override fun toString() = "{id: $id, data: {${data.map {
         it.toString()
