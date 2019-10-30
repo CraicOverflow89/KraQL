@@ -7,6 +7,8 @@ import kotlin.system.exitProcess
 
 class KraQLPortal: JFrame() {
 
+    private val dialogAbout = KraQLPortalDialogAbout(this)
+
     init {
 
         // Frame Properties
@@ -41,7 +43,7 @@ class KraQLPortal: JFrame() {
                 add(JMenuItem("About").apply {
                     mnemonic = KeyEvent.VK_A
                     addActionListener {
-                        // NOTE: render About dialog
+                        dialogAbout.show()
                     }
                 })
             })
@@ -63,5 +65,8 @@ class KraQLPortal: JFrame() {
         // Frame Visible
         setVisible(true)
     }
+
+    fun getVersion() = "0.0.1"
+    // NOTE: come back to this
 
 }
