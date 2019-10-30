@@ -1,11 +1,11 @@
-package craicoverflow89.kraql
+package craicoverflow89.kraql.portal
 
 import java.awt.BorderLayout
 import java.awt.event.KeyEvent
 import javax.swing.*
 import kotlin.system.exitProcess
 
-class KraQLStudio: JFrame() {
+class KraQLPortal: JFrame() {
 
     init {
 
@@ -63,11 +63,5 @@ class KraQLStudio: JFrame() {
         // Frame Visible
         setVisible(true)
     }
-
-}
-
-fun main() {
-
-    KraQLStudio()
 
 }
