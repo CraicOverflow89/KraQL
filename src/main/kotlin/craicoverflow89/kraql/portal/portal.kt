@@ -1,5 +1,6 @@
 package craicoverflow89.kraql.portal
 
+import craicoverflow89.kraql.KraQLApplication
 import java.awt.BorderLayout
 import java.awt.event.KeyEvent
 import javax.swing.*
@@ -8,6 +9,7 @@ import kotlin.system.exitProcess
 class KraQLPortal: JFrame() {
 
     private val dialogAbout = KraQLPortalDialogAbout(this)
+    private val version = KraQLApplication.resourceLoad("portal/version").readText()
 
     init {
 
@@ -66,7 +68,6 @@ class KraQLPortal: JFrame() {
         setVisible(true)
     }
 
-    fun getVersion() = "0.0.1"
-    // NOTE: come back to this
+    fun getVersion() = version
 
 }

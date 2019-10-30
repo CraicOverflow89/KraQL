@@ -13,8 +13,8 @@ class KraQLApplication {
 
     companion object {
 
-        private val reservedList = resourceLoad("reserved").readLines()
-        private val version = resourceLoad("version").readText()
+        private val reservedList = resourceLoad("database/reserved").readLines()
+        private val version = resourceLoad("database/version").readText()
 
         fun getVersion() = version
 
@@ -126,7 +126,7 @@ class KraQLApplication {
             //       that method is currently loading from file instead of taking query string and params
         }
 
-        private fun resourceLoad(path: String) = (object {}.javaClass.getResource("/$path")).let {
+        fun resourceLoad(path: String) = (object {}.javaClass.getResource("/$path")).let {
 
             // Validate Resource
             it ?: throw KraQLResourceException(path)
