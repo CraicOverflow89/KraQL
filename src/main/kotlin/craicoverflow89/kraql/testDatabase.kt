@@ -7,12 +7,12 @@ import java.util.Date
 
 fun main() {
 
-    //test1()
-    test2()
+    testLoad()
+    //testSave()
 
 }
 
-fun test1() {
+fun testLoad() {
 
     // Load Database
     val db = KraQLApplication.loadDatabase("C:/Users/jamie/Software/Kotlin/KraQL/data/test.kqld")
@@ -28,7 +28,7 @@ fun test1() {
 
 }
 
-fun test2() {
+fun testSave() {
 
     // Create Database
     val db = KraQLDatabase("test")

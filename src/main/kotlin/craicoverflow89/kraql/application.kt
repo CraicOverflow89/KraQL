@@ -1,9 +1,6 @@
 package craicoverflow89.kraql
 
-import craicoverflow89.kraql.components.KraQLDatabase
-import craicoverflow89.kraql.components.KraQLQueryNotFoundException
-import craicoverflow89.kraql.components.KraQLTable
-import craicoverflow89.kraql.components.KraQLTableFieldType
+import craicoverflow89.kraql.components.*
 import craicoverflow89.kraql.queries.KraQLQueryLexer
 import craicoverflow89.kraql.queries.KraQLQueryParser
 import org.antlr.v4.runtime.ANTLRInputStream
@@ -28,7 +25,7 @@ class KraQLApplication {
             // Validate File
             val file = File(path)
             if(!file.exists()) {
-                throw FileNotFoundException("The path to the database was invalid!")
+                throw KraQLDatabaseNotFoundException()
                 exitProcess(-1)
             }
 
