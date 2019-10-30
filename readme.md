@@ -28,6 +28,18 @@ Lightweight data storage library.
  - everything in a database is stored in a **kqld** archive file (use ZIP library)
  - queries to be performed can be read from **kqlq** files or passed as strings
 
+### Archive Structure
+
+The database files are structured as shown below, in the archive;
+ 
+ ```
+ARCHIVE
+ ├ ACCOUNTS
+ └ TABLES
+    ├ DATA
+    └ INDEXES
+```
+
 ### Notes
 
  - see https://www.javaworld.com/article/2074249/create-your-own-type-3-jdbc-driver--part-1.html
